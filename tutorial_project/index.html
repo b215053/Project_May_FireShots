@@ -1,0 +1,165 @@
+<html>
+<head>
+<title>
+Profile ADD</title>
+    </head>
+<body>
+  <div id="menu" style="text-align:center">
+      <br><br>
+     <input type="button" id="display_btn" value="Click to display">
+      <input type="button" id="add_btn" value="click to Add"><hr>
+      <br>
+      
+    </div>
+    <div id="content" style="text-align:center">
+    </div>
+ <script type="text/javascript">
+     /* function pid_write()
+     {
+         var request = new XMLHttpRequest();
+         request.onreadystatechange=function(){
+             if (request.readyState === XMLHttpRequest.DONE) {
+              // Take some action
+              if (request.status === 200) {
+                  
+                  
+              } else if (request.status === 403) {
+                  alert('Something went wrong on the server');
+              } else if (request.status === 500) {
+                  alert('Something went wrong on the server');
+                
+              } else {
+                  alert('Something went wrong on the server');
+                
+              }
+              
+          }  
+             
+         };
+         var pid= document.getElementById('pid').innerHTML;
+         alert(pid);
+         request.open('GET','/pid_write/'+pid,true);
+         request.send(null);
+     }*/
+     function id_write() // to write automatic ids when new ids are created 
+     {
+         var request = new XMLHttpRequest();
+         request.onreadystatechange = function () {
+          if (request.readyState === XMLHttpRequest.DONE) {
+              // Take some action
+              if (request.status === 200) {
+                  var data= JSON.parse(this.responseText);
+                  var actual_id= 'VC'+data[0].id;
+                  document.getElementById('pid').innerHTML= actual_id;
+                  //pid_write();
+              } else if (request.status === 403) {
+                  display_btn.value = 'something went wrong';
+              } else if (request.status === 500) {
+                  alert('Something went wrong on the server');
+                
+              } else {
+                  alert('Something went wrong on the server');
+                
+              }
+              
+          }  
+          
+        };
+        
+        // Make the request
+        request.open('GET','/autoid',true);
+         request.send(null);
+        
+         
+     }
+    
+    var display_btn =document.getElementById('display_btn');
+     display_btn.onclick = function ()
+     {
+         var request = new XMLHttpRequest();
+         request.onreadystatechange = function () {
+          if (request.readyState === XMLHttpRequest.DONE) {
+              // Take some action
+              if (request.status === 200) {
+                  display_btn.value = 'Sucess!';
+                  var content = '';
+                  var data = JSON.parse(this.responseText);
+                  var i=0;
+                  for( ; i<data.length;i++)
+                      {
+                         content += `<span>${data[i].profile_id}&nbsp ${data[i].name}&nbsp ${data[i].mobile}&nbsp &nbsp<a href="/uploads/${data[i].dp}">Click for image</a></span><hr><br>`; 
+                      }
+                  document.getElementById('content').innerHTML=content;
+              } else if (request.status === 403) {
+                  display_btn.value = 'something went wrong';
+              } else if (request.status === 500) {
+                  alert('Something went wrong on the server');
+                  display_btn.value = 'Click to display';
+              } else {
+                  alert('Something went wrong on the server');
+                  display_btn.value = 'Click to display';
+              }
+              
+          }  
+          // Not done yet
+        };
+        
+        // Make the request
+        request.open('GET','/display',true);
+         request.send(null);
+        
+     };
+     
+    var add_btn=document.getElementById('add_btn');
+  add_btn.onclick = function() 
+  {
+   var adding=`<span>NAME: </span><input type="text" id="username"> <br><br>
+                <span>ID</span>  <span id="pid"> </span> &nbsp  &nbsp <input type='submit' id='regenerate' value=' Regenerate ID'><br><br>
+                <span>mob no:  </span><input type="text" id="phone"> <br><br>
+                
+                <span><input type="submit" id="submitbtn" value="Submit"></span>`;
+   document.getElementById('content').innerHTML=adding;
+                id_write();
+                document.getElementById('regenerate').onclick=function()
+                {
+                    id_write();
+                }
+      
+      var submitbtn=document.getElementById('submitbtn');
+      submitbtn.onclick=function()
+      {  var profile_id = document.getElementById('pid').innerHTML;
+          var request = new XMLHttpRequest();
+                  request.onreadystatechange = function () {
+          if (request.readyState === XMLHttpRequest.DONE) {
+                // Take some action
+                if (request.status === 200) {
+                
+                   var content=`<h3> First Stage Data added !</h3><br>
+                                        <h2> <a  href='/upload_photo_form/${profile_id}'> Click here</a> to proceed</h2>  `;
+                    document.getElementById('content').innerHTML=content;
+                    
+                        
+                } else {
+                    var error = this.responseText;
+                    alert(/*'Error! Could not submit.Check that Mobile number or  email  id  should  be unique.'*/ error);
+                }
+                submitbtn.value = 'Submit';
+          }
+        };
+      
+      var name = document.getElementById('username').value;
+      var phone = document.getElementById('phone').value;
+    //  var photo = document.getElementById('photo').value;
+          request.open('POST', '/create', true);
+        request.setRequestHeader('Content-Type', 'application/json');
+        request.send(JSON.stringify({profile_id: profile_id, name: name, phone: phone}));  
+        submitbtn.value = 'Wait...';
+      
+  };   
+     
+  };
+    </script>
+</body>
+</html>
+
+
