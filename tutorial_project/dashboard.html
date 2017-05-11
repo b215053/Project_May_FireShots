@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<style>
+     
+</style>
+<html>
+<head>
+    <title>
+    </title>
+    <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+    
+        <div class="container">
+        <div class="col-sm-2">
+            <div id="afterlogin">
+            <br>    
+            <p>Hi, User(js)</p>    
+            <p>Leads <span class="badge">0js</span></p><br>
+            <p>Prospects <span class="badge">0js</span></p><br>
+            </div>    
+            
+            </div>
+         <div class="col-sm-10">
+            <h4 style="text-decoration:underline">Today's Appointments</h4>
+             <div style="height:260px;overflow:auto;background-color: aliceblue">
+             <table class="table table-condensed">
+                 
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Mob no.</th>
+          
+      </tr>
+    </thead>            
+    <tbody id='appoint'>
+     
+    </tbody>
+         
+  </table>
+  </div>
+             <h4 style="text-decoration:underline">Today's Follow-ups</h4>
+         <div style="height:260px;overflow:auto;background-color: azure">    
+        <table class="table table-condensed">
+                 
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Mob no.</th>
+          
+      </tr>
+    </thead>
+                 
+    <tbody id='appoint'>
+      
+    </tbody>
+  </table>     
+             </div>         
+    </div>
+    </div>
+</body>
+</html>
+        <script>
+        
+    myappoint = function (){
+         var request = new XMLHttpRequest();
+         request.onreadystatechange = function () {
+          if (request.readyState === XMLHttpRequest.DONE) {
+              
+              if (request.status === 200) {
+                  
+                  var content = '';
+                  var data = JSON.parse(this.responseText);
+                  var i=0;
+                  for( ; i<data.length;i++)
+                      {
+                         content += `<tr><td>${data[i].id}&nbsp </td><td>${data[i].name}&nbsp</td> <td> ${data[i].mob}&nbsp</td></tr>`; 
+                      }
+                  document.getElementById('appoint').innerHTML=content;
+              } else if (request.status === 403) {
+                  alert('something went wrong');
+              } else if (request.status === 500) {
+                  alert('Something went wrong on the server');
+                  
+              } else {
+                  alert('Something else the server');
+                  
+              }
+              
+          }  
+        
+        };
+        
+        
+        request.open('GET','/displayapt',true);
+         request.send(null);
+        
+     };
+            myappoint();
+        </script>
