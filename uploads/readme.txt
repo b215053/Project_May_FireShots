@@ -1,0 +1,1 @@
+Folder will contain all profile pics of candidates.

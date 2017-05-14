@@ -1,0 +1,1 @@
+Folder will contain all html files of project.

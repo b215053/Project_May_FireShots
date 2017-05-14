@@ -1,0 +1,1 @@
+Folder will contain all external linked javascript files.

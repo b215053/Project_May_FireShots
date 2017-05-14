@@ -1,0 +1,132 @@
+-- SQL schema for VC_DataCenter Author : abhilashkasap
+
+--for Table  user_details :-
+CREATE TABLE "user_details" (
+  "profile_id" text NOT NULL,
+  "person_of_contact" text NOT NULL,
+  "mobile_no" text NOT NULL,
+  "email" text NOT NULL,
+  "address" text NOT NULL,
+  "relation_with_candidate" text NOT NULL,
+  "city" text NOT NULL,
+  "candidate_first_name" text NOT NULL,
+  "candidate_middle_name" text NOT NULL,
+  "candidate_surname" text NOT NULL,
+  "date_of_birth" date NOT NULL,
+  "time_of_birth" time NOT NULL,
+  "body_type" text NOT NULL,
+  "complexion" text NOT NULL,
+  "blood_group" text NOT NULL,
+  "height" text NOT NULL,
+  "physically_challenged" text NOT NULL,
+  "employment_details" text NOT NULL,
+  "age" text NOT NULL,
+  "high_school" text NOT NULL,
+  "employment_status" text NOT NULL,
+  "masters" text NOT NULL,
+  "other_qualification" text NOT NULL,
+  "graduation" text NOT NULL,
+  "intermediate" text NOT NULL,
+  "caste" text NOT NULL,
+  "linkedin_id" text NOT NULL,
+  "religion" text NOT NULL,
+  "mother_tounge" text NOT NULL,
+  "family_type" text NOT NULL,
+  "gotra" text NOT NULL,
+  "manglik" text NOT NULL,
+  "rashi" text NOT NULL,
+  "nakshtra" text NOT NULL,
+  "marital_status" text NOT NULL,
+  "facebook_id" text NOT NULL,
+  "profile_pic_2" text NOT NULL,
+  "details_of_family" text NOT NULL,
+  "about_father" text NOT NULL,
+  "about_mother" text NOT NULL,
+  "details_of_father" text NOT NULL,
+  "preferred_partner_complexion" text NOT NULL,
+  "preferred_partner_age" text NOT NULL,
+  "preferred_partner_height" text NOT NULL,
+  "sibling_details" text NOT NULL,
+  "details_of_mother" text NOT NULL,
+  "profile_pic_3" text NOT NULL,
+  "preferred_partner_religion" text NOT NULL,
+  "preferred_partner_occupation" text NOT NULL,
+  "preferred_partner_body_type" text NOT NULL,
+  "preferred_partner_marital_status" text NOT NULL,
+  "preferred_partner_more_details" text NOT NULL,
+  "profile_pic_1" text NOT NULL,
+  "family_values" text NOT NULL,
+  "preferred_partner_caste" text NOT NULL
+);
+
+--Constraints for table user_details :-
+
+ALTER TABLE "user_details"
+ADD CONSTRAINT "user_details_profile_id" PRIMARY KEY ("profile_id"),
+ADD CONSTRAINT "user_details_mobile_no" UNIQUE ("mobile_no"),
+ADD CONSTRAINT "user_details_email" UNIQUE ("email"),
+ADD CONSTRAINT "user_details_linkedin_id" UNIQUE ("linkedin_id"),
+ADD CONSTRAINT "user_details_facebook_id" UNIQUE ("facebook_id");
+
+--Table emp_details :- 
+CREATE TABLE "emp_details" (
+  "username" text NOT NULL,
+  "password" text NOT NULL
+);
+
+--Constraints emp_details :-
+
+ALTER TABLE "emp_details"
+ADD CONSTRAINT "emp_details_username" PRIMARY KEY ("username");
+
+
+
+--table user_status :-
+
+CREATE TABLE "user_status" (
+  "profile_id" text NOT NULL,
+  "person_of_contact" text NOT NULL,
+  "mobile_no" text NOT NULL,
+  "emp_username" text NOT NULL,
+  "stage" integer NOT NULL
+);
+
+--Constrains user_details :-
+ALTER TABLE "user_status"
+ADD CONSTRAINT "user_status_profile_id" PRIMARY KEY ("profile_id"),
+ADD CONSTRAINT "user_status_mobile_no" UNIQUE ("mobile_no");
+
+ALTER TABLE "user_status"
+ADD CONSTRAINT user_status_profile_id_fkey FOREIGN KEY (profile_id) REFERENCES user_details(profile_id); 
+
+--table call_walkin_history
+
+CREATE TABLE "call_walkin_history" (
+  "profile_id" text NOT NULL,
+  "contact_date" date NOT NULL,
+  "contact_no" text NOT NULL,
+  "call_walkin_details" text NOT NULL,
+  "interaction_type" text NOT NULL,
+  "call_walkin_response" text NOT NULL,
+  "next_followup_date" date NOT NULL,
+  "appointment" integer NOT NULL,
+  "type_call_walkin" integer NOT NULL
+);
+
+--constraints call_walkin_history
+
+ALTER TABLE "call_walkin_history"
+ADD CONSTRAINT call_walkin_history_pid_fkey FOREIGN KEY (profile_id) REFERENCES user_details(profile_id);
+
+--table auto_id
+
+CREATE TABLE "auto_id" (
+ "entry" integer NOT NULL,
+ "id" text NOT NULL
+);
+
+
+--constraint auto_id
+
+ALTER TABLE "auto_id"
+ADD CONSTRAINT "auto_id_entry" PRIMARY KEY ("entry");
