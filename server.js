@@ -4,22 +4,29 @@ var path = require('path');
 var Pool = require('pg').Pool;
 var bodyParser = require('body-parser'); //parsing post request data using JSON
 var multer = require('multer'); //for file  uploading system
+var session = require('express-session'); //for cookies and session
+
 var config = {
     user: 'postgres',
-    database: 'test_db',
+    database: 'VC_DataCenter',
     host: 'localhost',
     port: '5432',
     password: 'abhilash'
 };
+
 //var global_id_control = 0;
 var app = express();
 var pool = new Pool(config);
 //var pid;
 //var photoid;
 //var controlwrite=0;
+app.use(session({
+    secret: 'VCBYFireShots',
+    cookie: { maxAge: 1000 * 60 * 60 * 24 * 30 }
+}));
 app.use(bodyParser.json());
 app.use(morgan('short'));
-//for photo upload 
+//for photo upload 5
 var storage = multer.diskStorage({
     destination: function(req, file, callback) {
         callback(null, './uploads'); //do create a uploads  folder otherwise it will show  error  uploading the file.
@@ -27,27 +34,184 @@ var storage = multer.diskStorage({
     filename: function(req, file, callback) {
         var str = file.originalname;
 
-       /* var i = 0;
-        var k;
-        for (; str[i] != '.'; i++);
-        console.log(str.substring(i + 1, str.length));
-        var extension = str.substring(i + 1, str.length);
-        //pid+extension;
-        extension='.'+extension;
-        photoid=pid+extension;*/
-        console.log(str +' at time of uploading');
+          console.log(str +' at time of uploading');
         callback(null, str);
     }
 });
 var upload = multer({ storage: storage }).single('userPhoto');
 //end photo upload
 app.get('/',function(req,res){
-   res.sendFile(__dirname+'/index.html'); 
+   res.sendFile(path.join(__dirname,'html','Login.html')); 
 });
-app.get('/dashboard',function(req,res){
-   res.sendFile(__dirname+ '/dashboard.html'); 
+app.get('/html/:filename',function(req,res){
+   res.sendFile(path.join(__dirname,'html',req.params.filename));
+    
 });
-app.get('/displayapt',function(req,res){
+app.get('/css/:filename',function(req,res){
+   res.sendFile(path.join(__dirname,'css',req.params.filename));
+    
+});
+app.get('/script/:filename',function(req,res){
+   res.sendFile(path.join(__dirname,'script',req.params.filename));
+    
+});
+
+
+app.get('/viewallprospects',function(req,res){
+   pool.query('select * from user_status where stage >=1',function(err,result){
+       if(err)
+           {
+               res.status(500).send(err.toString());
+           }
+       else
+           {
+               res.send(JSON.stringify(result.rows));
+           }
+   }) ;
+});
+//login_logout_section
+app.post('/create-user', function(req, res) {
+
+    var username = req.body.username;
+    var password = req.body.password;
+    pool.query('INSERT INTO emp_details (username, password) VALUES ($1, $2)', [username, password], function(err, result) {
+        if (err) {
+            res.status(500).send(err.toString());
+        } else {
+            res.send('User successfully created: ' + username);
+        }
+    });
+});
+
+app.post('/login', function(req, res) {
+    var username = req.body.username;
+    var password = req.body.password;
+
+    pool.query('SELECT * FROM emp_details WHERE username = $1', [username], function(err, result) {
+        if (err) {
+            res.status(500).send(err.toString());
+        } else {
+            if (result.rows.length === 0) {
+                res.status(403).send('username/password is invalid');
+            } else {
+                // Match the password
+                var dbString = result.rows[0].password;
+                
+                if (password === dbString) {
+
+                    // Set the session
+                    req.session.auth = { username: result.rows[0].username}; //set_cookie
+                   
+
+                    res.send('credentials correct!');
+
+                } else {
+                    res.status(403).send('username/password is invalid');
+                }
+            }
+        }
+    });
+});
+
+app.get('/check-login', function(req, res) {
+    if (req.session && req.session.auth && req.session.auth.username) {
+        // Load the user object
+        pool.query('SELECT * FROM emp_details WHERE username= $1', [req.session.auth.username], function(err, result) {
+            if (err) {
+                res.status(500).send(err.toString());
+            } else {
+                res.send(result.rows[0].username);
+            }
+        });
+    } else {
+        res.status(400).send('You are not logged in');
+    }
+});
+
+app.get('/viewprospects',function(req,res){
+   var username = req.session.auth.username;
+    pool.query('select * from user_status where stage >=1 and emp_username= $1',[username],function(err,result){
+       
+        if(err)
+            {
+                res.status(500).send(err.toString());
+            }
+        else
+            {
+                res.send(JSON.stringify(result.rows));
+            }
+    });
+    
+    
+});
+app.get('/viewleads',function(req,res){
+   var username = req.session.auth.username;
+    pool.query('select * from user_status where stage =0 and emp_username= $1',[username],function(err,result){
+       
+        if(err)
+            {
+                res.status(500).send(err.toString());
+            }
+        else
+            {
+                res.send(JSON.stringify(result.rows));
+            }
+    });
+    
+    
+});
+app.get('/viewallleads',function(req,res){
+   
+    pool.query('select * from user_status where stage =0',function(err,result){
+       
+        if(err)
+            {
+                res.status(500).send(err.toString());
+            }
+        else
+            {
+                res.send(JSON.stringify(result.rows));
+            }
+    });
+    
+    
+});
+app.get('/leadscount',function(req,res){
+   var username = req.session.auth.username;
+   // var username = 'testuser';
+    pool.query('select * from user_status where emp_username = $1 and stage =0',[username],function(err,result){
+        if(err)
+            {
+                res.status(500).send(err.toString());
+            }
+        else
+            {
+                res.send(JSON.stringify(result.rows.length));
+            }
+    });
+});
+app.get('/prospectscount',function(req,res){
+   var username = req.session.auth.username;
+   //var username = 'testuser';
+    pool.query('select * from user_status where emp_username = $1 and stage >0',[username],function(err,result){
+        if(err)
+            {
+                res.status(500).send(err.toString());
+            }
+        else
+            {
+                res.send(JSON.stringify(result.rows.length));
+            }
+    });
+});
+
+
+app.get('/logout', function(req, res) {
+    delete req.session.auth;
+    res.send('<http><head><meta http-equiv="Refresh" content="1; /"><h1>Logged Out</h1></head>');
+});
+
+/*app.get('/displayapt',function(req,res){
    
     pool.query('select * from test_call_history where appointment =1',function(err,result){
                     if(err)
@@ -60,7 +224,7 @@ app.get('/displayapt',function(req,res){
                             res.send(JSON.stringify(result.rows));
                         }
     });
-});
+});*/
 app.post('/api/photo/:id', function(req, res) {
     upload(req, res, function(err) {
         if (err) {
@@ -97,6 +261,8 @@ app.post('/api/photo/:id', function(req, res) {
             }
     });
 });
+
+
 app.get('/uploads/:photoid',function(req,res){
     
     if(req.params.photoid==='blank')
@@ -126,7 +292,7 @@ app.get('/redirect',function(req,res){
                           <a href='/'>Click to return to main menu !</a></div>`;
     res.send(htmltemplate);
 });
-app.get('/display',function(req,res){
+/*app.get('/display',function(req,res){
     pool.query('SELECT * FROM test',function(err,result){
            if (err) {
               res.status(500).send(err.toString());
@@ -151,7 +317,7 @@ app.get('/autoid',function(req,res){
        else
            {  //controlwrite=1;
                  var profile_id = result.rows[0].id;
-               console.log('here ypou '+profile_id);
+               console.log('here you '+profile_id);
                var integer_id=0;
             for(var i=2;i<profile_id.length;i++)
                 {
