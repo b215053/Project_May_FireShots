@@ -6,6 +6,7 @@ CREATE TABLE "user_details" (
   "person_of_contact" text NOT NULL,
   "mobile_no" text NOT NULL,
   "email" text NOT NULL,
+  "gender" text NOT NULL,
   "address" text NOT NULL,
   "relation_with_candidate" text NOT NULL,
   "city" text NOT NULL,
