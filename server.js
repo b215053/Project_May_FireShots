@@ -161,7 +161,19 @@ app.get('/displayapt',function(req,res){
    });
     
 });
-
+//testapi
+app.get('/checkpopup',function(req,res){
+   pool.query('select * from emp_details', function(err,result){
+       if(err)
+           {
+               res.status(500).send(err.toString());
+           }
+       else
+           {
+               res.send(JSON.stringify(result.rows));
+           }
+   }) ;
+});
 app.get('/cwupdate/:id',function(req,res){
    
     var pid= req.params.id;

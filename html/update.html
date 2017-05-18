@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<style>
+
+</style>
+<html>
+
+<head>
+    <title>
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="col-sm-12" style="text-align:right">
+            <img src="logo.jpg" style="float:left;height:60px;width:300px;margin-left:-60px" />
+
+            <div id="logout">
+                <br>
+
+            </div>
+        </div>
+    </div>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="leads.html">Leads</a></li>
+                <li><a href="#">Create New Enquiry</a></li>
+                <li><a href="#">Prospects</a></li>
+                <li><a href="#">Payment</a></li>
+
+            </ul>
+
+        </div>
+
+    </nav>
+    <div class="container">
+        <h4 style="text-decoration:underline;text-align:center"><b>Previous History</b></h4>
+        <div class="col-sm-12" id="olddetails">
+        </div>
+    </div>
+    <div class="container" style="background-color:azure">
+        <h4 style="text-decoration:underline;text-align:center"><b>Call/Walk-in Update</b></h4>
+        <div class="col-sm-12" id="calldetails">
+
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-2" for="type">Type:</label>
+                    <div class="col-sm-offset -2 col-sm-10">
+
+                        <label><input type="checkbox" name="type" value="0"> Call</label>
+                        <label><input type="checkbox" name="type" value="1"> Walk-in</label>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2" for="mobile">Phone:</label>
+
+                    <div class="col-sm-10" id="myphone">
+                        <input type="mobile" class="form-control" id="phone" placeholder="Enter Contact No.">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2" for="contacteddate">Contacted On:</label>
+                    <div class="col-sm-10" id="contact">
+                        <select>
+                <option>Date</option>
+                <option  name="cdate" value="01">01</option>
+                <option name="cdate" value="02">02</option>
+                <option name="cdate" value="03">03</option>
+                <option name="cdate" value="04">04</option>
+                <option name="cdate" value="05">05</option>
+                <option name="cdate" value="06">06</option>
+                <option name="cdate" value="07">07</option>
+                <option name="cdate" value="08">08</option>
+                <option name="cdate" value="09">09</option>
+                <option name="cdate" value="10">10</option>
+                <option name="cdate" value="11">11</option>
+                <option name="cdate" value="12">12</option>
+                <option name="cdate" value="13">13</option>
+                <option name="cdate" value="14">14</option>
+                <option name="cdate" value="15">15</option>
+                <option name="cdate" value="16">16</option>
+                <option name="cdate" value="17">17</option>
+                <option name="cdate" value="18">18</option>
+                <option name="cdate" value="19">19</option>
+                <option name="cdate" value="20">20</option>
+                <option name="cdate" value="21">21</option>
+                <option name="cdate" value="22">22</option>
+                <option name="cdate" value="23">23</option>
+                <option name="cdate" value="24">24</option>
+                <option name="cdate" value="25">25</option>
+                <option name="cdate" value="26">26</option>
+                <option name="cdate" value="27">27</option>
+                <option name="cdate" value="28">28</option>
+                <option name="cdate" value="29">29</option>
+                <option name="cdate" value="30">30</option>
+                <option name="cdate" value="31">31</option>
+                </select>
+                        <select>
+                <option>Month</option>
+                <option  name="cmonth" value="01">01</option>
+                <option  name="cmonth" value="02">02</option>
+                <option  name="cmonth" value="03">03</option>
+                <option  name="cmonth" value="04">04</option>
+                <option  name="cmonth" value="05">05</option>
+                <option  name="cmonth" value="06">06</option>
+                <option  name="cmonth" value="07">07</option>
+                <option  name="cmonth" value="08">08</option>
+                <option  name="cmonth" value="09">09</option>
+                <option  name="cmonth" value="10">10</option>
+                <option  name="cmonth" value="11">11</option>
+                <option  name="cmonth" value="12">12</option>
+                </select>
+                        <select>
+                <option>Year</option>
+                <option  name="cyear" value="2016">2016</option>
+                <option  name="cyear" value="2017">2017</option>
+                <option  name="cyear" value="2018">2018</option>
+                <option  name="cyear" value="2019">2019</option>
+                <option  name="cyear" value="2020">2020</option>
+                <option  name="cyear" value="2021">2021</option>
+                <option  name="cyear" value="2022">2022</option>
+                <option  name="cyear" value="2023">2023</option>
+                <option  name="cyear" value="2024">2024</option>
+                <option  name="cyear" value="2025">2025</option>
+                </select>
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2" for="calldetail">Call Details:</label>
+                    <div class="col-sm-10">
+                        <textarea class="form-control" rows="5" id="calldetail" placeholder="Enter Call Details"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2" for="interaction">Interaction Type:</label>
+                    <div class="col-sm-offset -2 col-sm-10">
+
+                        <label><input type="checkbox" name="itype" value="outbound"> Outbound</label>
+                        <label><input type="checkbox" name="itype" value="inbound"> Inbound</label>
+                        <label><input type="checkbox" name="itype" value="walkin"> Walk-in</label>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="col-sm-2" for="callresponse">Call Response:</label>
+                    <div class="col-sm-offset -2 col-sm-10">
+
+                        <label><input type="checkbox" name="response" value="ptp" > PTP</label>
+                        <label><input type="checkbox" name="response" value="nrpc"> NRPC</label>
+                        <label><input type="checkbox" name="response" value="callback"> CallBack</label>
+                        <label><input type="checkbox" name="response" value="not interested"> Not Interested</label>
+                        <label><input type="checkbox" name="response" value="1"> Schedule Appointment</label>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="col-sm-2" for="responsetype">Response Type:</label>
+                    <div class="col-sm-offset -2 col-sm-10">
+
+                        <label><input type="checkbox" name="rtype" value="hot"> Hot</label>
+                        <label><input type="checkbox" name="rtype" value="warm"> Warm</label>
+                        <label><input type="checkbox" name="rtype" value="normal"> Normal</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2" for="stage">Stage:</label>
+                    <div class="col-sm-offset -2 col-sm-10">
+
+                        <label><input type="checkbox" name="stage" value="0"> Lead</label>
+                        <label><input type="checkbox" name="stage" value="1"> Prospect</label>
+                        <label><input type="checkbox" name="stage" value="2"> Opportunity</label>
+                        <label><input type="checkbox" name="stage" value="member"> Membership</label>
+
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="col-sm-2" for="followupdate">Next Follow Up Date:</label>
+                    <div class="col-sm-10" id="followup">
+                        <select>
+                <option>Date</option>
+                <option  name="fdate" value="01">01</option>
+                <option name="fdate" value="02">02</option>
+                <option name="fdate" value="03">03</option>
+                <option name="fdate" value="04">04</option>
+                <option name="fdate" value="05">05</option>
+                <option name="fdate" value="06">06</option>
+                <option name="fdate" value="07">07</option>
+                <option name="fdate" value="08">08</option>
+                <option name="fdate" value="09">09</option>
+                <option name="fdate" value="10">10</option>
+                <option name="fdate" value="11">11</option>
+                <option name="fdate" value="12">12</option>
+                <option name="fdate" value="13">13</option>
+                <option name="fdate" value="14">14</option>
+                <option name="fdate" value="15">15</option>
+                <option name="fdate" value="16">16</option>
+                <option name="fdate" value="17">17</option>
+                <option name="fdate" value="18">18</option>
+                <option name="fdate" value="19">19</option>
+                <option name="fdate" value="20">20</option>
+                <option name="fdate" value="21">21</option>
+                <option name="fdate" value="22">22</option>
+                <option name="fdate" value="23">23</option>
+                <option name="fdate" value="24">24</option>
+                <option name="fdate" value="25">25</option>
+                <option name="fdate" value="26">26</option>
+                <option name="fdate" value="27">27</option>
+                <option name="fdate" value="28">28</option>
+                <option name="fdate" value="29">29</option>
+                <option name="fdate" value="30">30</option>
+                <option name="fdate" value="31">31</option>
+                </select>
+                        <select>
+                <option>Month</option>
+                <option  name="fmonth" value="01">01</option>
+                <option  name="fmonth" value="02">02</option>
+                <option  name="fmonth" value="03">03</option>
+                <option  name="fmonth" value="04">04</option>
+                <option  name="fmonth" value="05">05</option>
+                <option  name="fmonth" value="06">06</option>
+                <option  name="fmonth" value="07">07</option>
+                <option  name="fmonth" value="08">08</option>
+                <option  name="fmonth" value="09">09</option>
+                <option  name="fmonth" value="10">10</option>
+                <option  name="fmonth" value="11">11</option>
+                <option  name="fmonth" value="12">12</option>
+                </select>
+                        <select>
+                <option>Year</option>
+                <option  name="fyear" value="2016">2016</option>
+                <option  name="fyear" value="2017">2017</option>
+                <option  name="fyear" value="2018">2018</option>
+                <option  name="fyear" value="2019">2019</option>
+                <option  name="fyear" value="2020">2020</option>
+                <option  name="fyear" value="2021">2021</option>
+                <option  name="fyear" value="2022">2022</option>
+                <option  name="fyear" value="2023">2023</option>
+                <option  name="fyear" value="2024">2024</option>
+                <option  name="fyear" value="2025">2025</option>
+                </select>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-5 col-sm-12">
+                        <button type="submit" class="btn btn-default" onclick="updating();stage();">Submit</button>
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+
+
+</body>
+
+</html>
+
+
+<script>
+    function memberdetails() {
+        var request = new XMLHttpRequest();
+        request.onreadystatechange = function() {
+            if (request.readyState === XMLHttpRequest.DONE) {
+
+                if (request.status === 200) {
+
+                    var content = '';
+                    var data = JSON.parse(this.responseText);
+                    var i = 0;
+                    for (; i < data.length; i++) {
+                        if (data[i].type_call_walkin === 1) {
+                            content += `<p> <b>Type: Call</b></p>
+                            <p><b>Contact: ${data[i].contact_no}</b></p>
+                            <p><b>Last Follow-up Date: ${data[i].contact_date}</b></p>
+                            <p><b>Interaction Type: ${data[i].interaction_type}</b></p>
+                            <p><b>Response Type: ${data[i].call_walkin_response}</b></p>
+                            <p><b>Call/Walk-in Details: ${data[i].call_walkin_details}</b></p>`;
+                        } else {
+                            content += `<p> <b>Type: Walk-in</b></p>
+                            <p><b>Contact: ${data[i].contact_no}</b></p>
+                            <p><b>Last Follow-up Date: ${data[i].contact_date}</b></p>
+                            <p><b>Interaction Type: ${data[i].interaction_type}</b></p>
+                            <p><b>Response Type: ${data[i].call_walkin_response}</b></p>
+                            <p><b>Call/Walk-in Details: ${data[i].call_walkin_details}</b></p>`;
+                        }
+
+
+                    }
+
+                    document.getElementById('appoint').innerHTML = aptcontent;
+                } else if (request.status === 403) {
+                    alert('something went wrong on the server');
+                } else if (request.status === 500) {
+                    alert('Something went wrong on the server');
+
+                } else {
+
+                    alert('Something went wrong');
+
+                }
+            }
+        };
+        request.open('GET', '/displayapt', true);
+        request.send(null);
+
+        var content = `
+                           <p> <b>Type: </b></p>
+                            <p><b>Contact: </b></p>
+                            <p><b>Last Follow-up Date: </b></p>
+                            <p><b>Interaction Type: </b></p>
+                            <p><b>Response Type: </b></p>
+                            <p><b>Call/Walk-in Details: </b></p>
+                            `;
+        document.getElementById("olddetails").innerHTML = content;
+    }
+    memberdetails();
+
+    function stage() {
+        var st = document.getElementsByName("stage");
+        var j = 0;
+        for (var i = 0; i < st.length; i++) {
+            if (st[i].checked) {
+                j++;
+                break;
+            }
+        }
+        var s = st[i].value;
+        if (j === 0) {
+            f = 1;
+            alert("Stage Missing");
+        }
+        j = 0;
+        var request = new XMLHttpRequest();
+        request.onreadystatechange = function() {
+            if (request.readyState === XMLHttpRequest.DONE) {
+                // Take some action
+                if (request.status === 200) {
+                    alert("Submission Successfull");
+
+                } else {
+                    var error = this.responseText;
+                    alert( /*'Error! Could not submit.Check that Mobile number or  email  id  should  be unique.'*/ error);
+                }
+                submitbtn.value = 'Success';
+            }
+        };
+
+        //  var photo = document.getElementById('photo').value;
+        request.open('POST', '/somethinngelse', true);
+        request.setRequestHeader('Content-Type', 'application/json');
+        request.send(JSON.stringify({
+            stage: s
+        }));
+        submitbtn.value = 'Wait...';
+
+    }
+
+    function updating() {
+
+
+        var c = document.getElementById("calldetail").value;
+        var x = document.getElementsByName("itype");
+        var y = document.getElementsByName("response");
+        var z = document.getElementsByName("rtype");
+        var fd = document.getElementsByName("fdate");
+        var fm = document.getElementsByName("fmonth");
+        var fy = document.getElementsByName("fyear");
+        var cd = document.getElementsByName("cdate");
+        var cm = document.getElementsByName("cmonth");
+        var cy = document.getElementsByName("cyear");
+        var ph = document.getElementById("phone").value;
+        var typ = document.getElementsByName("type");
+        var st = document.getElementsByName("stage");
+
+        var i;
+        var j = 0;
+        var f;
+        var apt;
+        for (i = 0; i < x.length; i++) {
+            if (x[i].checked) {
+
+                j++;
+                break;
+            }
+        }
+        var interaction = x[i].value;
+        if (j === 0) {
+            f = 1;
+            alert("Interaction Type Missing");
+        }
+        j = 0;
+
+        for (i = 0; i < y.length; i++) {
+            if (y[i].checked) {
+
+                j++;
+                break;
+            }
+
+        }
+        if (j === 0) {
+            f = 1;
+            alert("Response Missing");
+        }
+        var resp = y[i].value;
+        if (resp === y[4].value) {
+            apt = 1;
+        } else {
+            apt = 0;
+        }
+
+        j = 0;
+        for (i = 0; i < z.length; i++) {
+            if (z[i].checked) {
+
+                j++;
+                break;
+            }
+        }
+        var rt = z[i].value;
+        if (j === 0) {
+            f = 1;
+            alert("Response Type Missing");
+        }
+        j = 0;
+
+        for (i = 0; i < fd.length; i++) {
+            if (fd[i].selected) {
+                j++;
+                break;
+            }
+
+        }
+        var d1 = fd[i].value;
+        if (j === 0) {
+            f = 1;
+            alert("Invalid Date");
+        }
+        j = 0;
+        for (i = 0; i < fm.length; i++) {
+            if (fm[i].selected) {
+                j++;
+                break;
+            }
+        }
+        var m1 = fm[i].value;
+        if (j === 0) {
+            f = 1;
+            alert("Invalid Date");
+        }
+        j = 0;
+        for (i = 0; i < fy.length; i++) {
+            if (fy[i].selected) {
+                j++;
+                break;
+            }
+
+        }
+        var y1 = fy[i].value;
+        if (j === 0) {
+            f = 1;
+            alert("Invalid Date");
+        }
+        j = 0;
+        for (i = 0; i < cd.length; i++) {
+            if (cd[i].selected) {
+
+                j++;
+                break;
+            }
+        }
+        var d2 = cd[i].value;
+        if (j === 0) {
+            f = 1;
+            alert("Invalid Date");
+        }
+        j = 0;
+        for (i = 0; i < cm.length; i++) {
+            if (cm[i].selected) {
+                j++;
+                break;
+            }
+        }
+        var m2 = cm[i].value;
+        if (j === 0) {
+            f = 1;
+            alert("Invalid Date");
+        }
+        j = 0;
+        for (i = 0; i < cy.length; i++) {
+            if (cy[i].selected) {
+                j++;
+                break;
+            }
+        }
+        var y2 = cy[i].value;
+        if (j === 0) {
+            f = 1;
+            alert("Invalid Date");
+        }
+        j = 0;
+
+        for (i = 0; i < typ.length; i++) {
+
+            if (typ[i].checked) {
+                j++;
+                break;
+            }
+        }
+        var t = typ[i].value;
+        if (j === 0) {
+            f = 1;
+            alert("Type Missing");
+        }
+        j = 0;
+        for (i = 0; i < st.length; i++) {
+            if (st[i].checked) {
+                j++;
+                break;
+            }
+        }
+        var s = st[i].value;
+        if (j === 0) {
+            f = 1;
+            alert("Stage Missing");
+        }
+        var followdate = y1 + "-" + m1 + "-" + d1;
+        var contactdate = y2 + "-" + m2 + "-" + d2;
+        //You can check from below alert boxes about sending values
+        /*alert(contactdate); 
+        alert(ph);
+        alert(c);
+        alert(interaction);
+        alert(resp);
+        alert(followdate);
+        alert(apt);
+        alert(t);*/
+        if (f !== 1) {
+            var request = new XMLHttpRequest();
+            request.onreadystatechange = function() {
+                if (request.readyState === XMLHttpRequest.DONE) {
+                    // Take some action
+                    if (request.status === 200) {
+                        alert("Submission Successfull");
+
+                    } else {
+                        var error = this.responseText;
+                        alert( /*'Error! Could not submit.Check that Mobile number or  email  id  should  be unique.'*/ error);
+                    }
+                    submitbtn.value = 'Success';
+                }
+            };
+
+            //  var photo = document.getElementById('photo').value;
+            request.open('POST', '/create', true);
+            request.setRequestHeader('Content-Type', 'application/json');
+            request.send(JSON.stringify({
+                contact_date: contactdate,
+                contact_no: ph,
+                call_walkin_details: c,
+                interaction_type: interaction,
+                call_walkin_response: resp,
+                next_followup_date: followdate,
+                appointment: apt,
+                type_call_walkin: t
+            }));
+            submitbtn.value = 'Wait...';
+
+        }
+    }
+
+    function loadLoggedInUser(username) {
+
+        document.getElementById("logout").innerHTML = `<p>Hi,${username}</p><a href='/logout'>Logout</a>`;
+
+    }
+
+    function loadLogin() {
+        // Check if the user is already logged in
+        var request = new XMLHttpRequest();
+        request.onreadystatechange = function() {
+            if (request.readyState === XMLHttpRequest.DONE) {
+                if (request.status === 200) {
+                    loadLoggedInUser(this.responseText);
+
+                }
+
+            }
+        };
+
+        request.open('GET', '/check-login', true);
+        request.send(null);
+    }
+    loadLogin();
+</script>

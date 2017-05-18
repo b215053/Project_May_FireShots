@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $(".submitbtn").click(function() {
+
+                var request = new XMLHttpRequest();
+                request.onreadystatechange = function() {
+                    if (request.readyState === XMLHttpRequest.DONE) {
+                        if (request.status === 200) {
+                            var data = JSON.parse(this.responseText);
+                            document.getElementById('username').innerHTML = data[0].username;
+                            document.getElementById('email').innerHTML = data[0].username;
+                            $("#myModal").modal('show');
+                        }
+                    }
+                };
+
+                request.open('GET', '/checkpopup', true);
+                request.send(null);
+
+                // $("#myModal").modal('show');
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div class="myprofile">
+        <!-- Button HTML (to Trigger Modal) -->
+        <button style="border-color:slategrey;border-radius:25px;background-color:white"><a href="#" class="btn">VC0123</a></button>
+        <input type="submit" class="submitbtn" id="sbtn" value="Submit">
+        <!-- Modal HTML -->
+
+    </div>
+
+    <div id="myModal" class="modal fade">
+        <div class="modal-dialog" style="width:1080px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h5 class="modal-title" style="text-align:center">Personal Details</h5>
+                </div>
+                <div class="modal-body" style="height:494px;overflow:auto">
+                    <div class="container" style="width:inherit">
+                        <div class="col-sm-4">
+                            <p><b>Profile Id:</b>VC000123</p>
+                            <p><b>Email:</b><span id='email'>myself@gmail.com</span></p>
+                            <p><b>First Name:</b>Bruce</p>
+                            <p><b>Address:</b>12/24 hIMAKJAA SJFSF kjsdjldks snflsdjlfsf sfjlslfjssls-29129019</p>
+                            <p><b>TOB:</b>BHOR ME</p>
+                            <p><b>Height:</b>6'1''</p>
+                            <p><b>Physically Challenged:</b>No</p>
+                            <p><b>High School:</b>sarkaari</p>
+                            <p><b>Masters:</b>mtech</p>
+                            <p><b>Mother Tongue:</b>pink</p>
+                            <p><b>Gotra:</b>akajd</p>
+                            <p><b>Manglik:</b>sawaal hi nahi</p>
+                            <p><b>Family Type:</b>star parivaar</p>
+                            <p><b>Details of Father:</b>Bhaukali hain bole naa</p>
+                            <p><b>Sibling Details:</b>dekh lena</p>
+                            <p><b>Preferred Partner Complexion:</b>nigga</p>
+                            <p><b>Preferred Partner Occupation:</b>berojgaar</p>
+                            <br>
+                            <br>
+                            <img src="logo.jpg" style="height:250px;width:250px" />
+                        </div>
+                        <div class="col-sm-4">
+                            <p><b>Person of Contact:</b><span id="username">Anonymous</span></p>
+                            <p><b>Mobile:</b>941585656564</p>
+                            <p><b>Middle Name:</b>Kr.</p>
+                            <p><b>City:</b>Arkham</p>
+                            <p><b>DOB:</b>19-19-1999</p>
+                            <p><b>Body Type:</b>DHEELA</p>
+                            <p><b>Blood Group:</b>AB</p>
+                            <p><b>Employment Status:</b>Busy</p>
+                            <p><b>Intermediate:</b>ye bhi sarkaari</p>
+                            <p><b>Other Qualification:</b>Anonymous</p>
+                            <p><b>Religion:</b>indian</p>
+                            <p><b>Nakshtra:</b>bach ke</p>
+                            <p><b>Family Details:</b>Dekh leo</p>
+                            <p><b>About Mother:</b>bahut seedhi</p>
+                            <p><b>Preferred Partner Age:</b>19</p>
+                            <p><b>Preferred Partner Body Type:</b>sookha</p>
+                            <p><b>Preferred Partner Maritial Status:</b>married</p>
+                            <p><b>Preferred Partner More Details:</b>ab kya bacha</p>
+                            <br>
+                            <br>
+                            <img src="logo.jpg" style="height:250px;width:250px" />
+                        </div>
+                        <div class="col-sm-4">
+                            <p><b>Gender:</b>An</p>
+                            <p><b>Linkedin Id:</b>Anonymous</p>
+                            <p><b>Last Name:</b>Wayne</p>
+                            <p><b>Relation with candidate:</b>pata nahi</p>
+                            <p><b>Complexion:</b>niggah</p>
+                            <p><b>Age:</b>IDK</p>
+                            <p><b>Employment Detail:</b>Berojgaaar</p>
+                            <p><b>Graduation:</b>Gothapatnaa</p>
+                            <p><b>Facebook Id:</b>Anonymous</p>
+                            <p><b>Caste:</b>sc/st/</p>
+                            <p><b>Rashi:</b>kuch bhi</p>
+                            <p><b>Maritial Status:</b>married</p>
+                            <p><b>Family values:</b>nothing</p>
+                            <p><b>About Father:</b>Bhaukali</p>
+                            <p><b>Details of Mother:</b>bahut seedhi hain bhai</p>
+                            <p><b>Preferred Partner Religion:</b>jo bolo</p>
+                            <p><b>Preferred Partner Height:</b>tinga</p>
+                            <p><b>Preferred Partner Caste:</b>kuch bhi</p>
+                            <br>
+                            <br>
+                            <img src="logo.jpg" style="height:250px;width:250px" />
+                        </div>
+
+                    </div>
+                    <br>
+                    <br>
+                </div>
+                <div class="modal-header">
+
+                    <h5 class="modal-title" style="text-align:center">Call/Walkin History</h5>
+                </div>
+                <div class="modal-body" style="height:494px;overflow:auto">
+                    <div class="container" style="width:inherit">
+                        <div class="col-sm-4">
+                            <p><b>Type:</b>Call/Walkin</p>
+                            <p><b>Contact no:</b>98985662</p>
+                            <p><b>Response:</b>thanda</p>
+
+                        </div>
+                        <div class="col-sm-4">
+                            <p><b>Profile Id:</b>VC01212</p>
+                            <p><b>Call/Walkin Details:</b>941585656564</p>
+                            <p><b>Next Follow-up Date:</b>00-00-0000</p>
+
+                        </div>
+                        <div class="col-sm-4">
+                            <p><b>Contact Date:</b>00-00-0000</p>
+                            <p><b>Interaction Type:</b>okay</p>
+                            <p><b>Appointment:</b>No</p>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</body>
+
+</html>

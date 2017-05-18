@@ -128,13 +128,13 @@
         var click_submit_btn = document.getElementById("submit_btn");
         click_submit_btn.onclick = function() {
             var user_in_phone = document.getElementById("phone").value;
-            console.log(user_in_phone);
+            //  alert('extracting from page '+user_in_phone);
             var request = new XMLHttpRequest();
             request.onreadystatechange = function() {
                 if (request.readyState === XMLHttpRequest.DONE) {
                     if (request.status === 200) {
                         var res_str = JSON.parse(this.responseText);
-                        console.log(res_str);
+                        // console.log('response string: ' + res_str);
                         if (res_str === 1)
                             alert('Mobile no verified !');
                         else {
@@ -142,17 +142,37 @@
                             return;
                         }
                         var phone_no = document.getElementById("phone").value;
-                        var member_pack = document.getElementById("sel1");
+                        var member_pack = document.getElementById("sel1").value;
 
-                        if ((phone_no.value === '') || (member_pack.value === 'unassigned')) {
+                        if ((phone_no.value === '') || (member_pack === 'unassigned')) {
                             alert("Please enter valid inputs in all the fields... ");
                             return;
                         }
-                        console.log(phone_no);
-                        console.log(member_pack);
+                        //  alert('extracting from input field '+phone_no);
+                        // alert(member_pack);
                         click_submit_btn.value = 'validating';
 
                         var req = new XMLHttpRequest();
+                        var stage = '';
+                        switch (member_pack) {
+                            case 'VCC-3 months':
+                                stage = '3';
+                                break;
+                            case 'VCC-6 months':
+                                stage = '4';
+                                break;
+                            case 'VCC-12 months':
+                                stage = '5';
+                                break;
+                            case 'VAC-3 months':
+                                stage = '6';
+                                break;
+                            case 'VAC-6 months':
+                                stage = '7';
+                                break;
+                        }
+                        //   alert('stage = ' + stage);
+
                         req.onreadystatechange = function() {
                             if (req.readyState === XMLHttpRequest.DONE) {
                                 // Take some action
@@ -167,13 +187,12 @@
                                         click_submit_btn.value = "validating";
                                     }*/
                                     alert("Membership confirmed");
-
                                 } else if (req.status === 403) {
                                     alert('something went wrong');
                                 } else if (req.status === 500) {
-                                    alert('Something went wrong on the server');
+                                    alert('Something went wrong on the server status 500 in updatestage');
                                 } else {
-                                    alert('Something went wrong on the server');
+                                    alert('Something went wrong on the server in update stage.');
                                 }
 
                             }
@@ -182,7 +201,7 @@
                         req.setRequestHeader('content-type', 'application/json');
                         req.send(JSON.stringify({
                             phone_no: phone_no,
-                            member_pack: member_pack
+                            member_pack: stage
                         }));
 
                     } else {
