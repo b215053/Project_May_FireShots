@@ -1,0 +1,225 @@
+<!--add links to profile ids.
+add links to call-in and walk-in buttons.-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        MY PROSPECTS
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<style></style>
+
+<body>
+
+    <div class="container">
+        <div class="col-sm-12" style="text-align:right">
+            <img src="/uploads/logol.jpg" style="float:left;height:60px;width:300px;margin-left:-60px" />
+
+            <div id="logout">
+                <br>
+
+            </div>
+        </div>
+    </div>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+
+            <ul class="nav navbar-nav">
+                <li><a href="/html/dashboard.html">Dashboard</a></li>
+                <li><a href="/html/leads.html">Leads</a></li>
+                <li><a href="#">Create New Enquiry</a></li>
+                <li class="active"><a href="/html/prospect.html">Prospects</a></li>
+                <li><a href="/html/payment.html">Payment</a></li>
+                <li><a href="#">Query</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+
+
+        <div class="col-sm-10">
+            <h2>My Prospects/Oppurtunities/Memberships</h2>
+            <hr/>
+            <br/>
+            <div style=" background-color: aliceblue">
+                <table class="table table-condensed">
+                    <thead style="background-color : darkgrey">
+                        <tr>
+                            <th class='col-sm-2'>Profile id</th>
+                            <th class='col-sm-3'>Name</th>
+                            <th class='col-sm-2'>Phone no.</th>
+                            <th class='col-sm-1'>Call-in</th>
+                            <th class='col-sm-1'>Walk-in</th>
+                            <th class='col-sm-1'>Stage</th>
+                        </tr>
+                    </thead>
+                    <tbody id='prosps_table'>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
+
+<script type='text/javascript'>
+    $(function() {
+        $('[rel="popover"]').popover({
+            container: 'body',
+            html: true,
+            content: function() {
+                var clone = $($(this).data('popover-content')).clone(true).removeClass('hide');
+                return clone;
+            }
+        }).click(function(e) {
+            e.preventDefault();
+        });
+    });
+
+    function loadLogin() {
+        // Check if the user is already logged in
+        var request = new XMLHttpRequest();
+        request.onreadystatechange = function() {
+            if (request.readyState === XMLHttpRequest.DONE) {
+                if (request.status === 200) {
+                    loadLoggedInUser(this.responseText);
+                    // changediv(this.responseText);
+                }
+            }
+        };
+
+        request.open('GET', '/check-login', true);
+        request.send(null);
+    }
+
+    function loadLoggedInUser(username) {
+
+        document.getElementById("logout").innerHTML = `<p>Hi,${username}</p><a href="/logout">Logout</a>`;
+    }
+
+
+
+
+    my_prosps = function() {
+        var request = new XMLHttpRequest();
+        request.onreadystatechange = function() {
+            if (request.readyState === XMLHttpRequest.DONE) {
+                if (request.status === 200) {
+                    /*var content = '<table><tr><td>Prof. id</td><td>Name</td><td>Phone no.</td><td>Call-in</td><td>Walk-in</td><td>Stage</td></tr>' ;
+                    var jArr = JSON.parse(this.responseText);
+                    var i = 0;
+                    for(;i<data.length;i++)
+                        {
+                            $.each(jArr,function(index,data){
+                                content += '<tr><td>'+data.profile_id+'</td><td>'+data.person_of_contact+'</td><td>'+ data.mobile_no+'</td><td><input type = "button" id = "callin_"+data.profile_id value = "Click here"></td><td><input type = "button" id = "walkin_"+data.profile_id value = "Click here"></td><td>'+data.stage+'</td></tr>';
+                            });
+                            console.log('parsed row ${i+1} ');
+                        }*/
+                    var content = '';
+                    var data = JSON.parse(this.responseText);
+                    var i = 0;
+                    var stagename = "";
+                    for (; i < data.length; i++) {
+
+                        switch (data[i].stage) {
+                            case 0:
+                                stagename = "LEAD";
+                                break;
+                            case 1:
+                                stagename = "PROSPECT";
+                                break;
+                            case 2:
+                                stagename = "OPPURTUNITY";
+                                break;
+                            case 3:
+                                stagename = "VCC-3 MONTHS";
+                                break;
+                            case 4:
+                                stagename = "VCC-6 MONTHS";
+                                break;
+                            case 5:
+                                stagename = "VCC-12 MONTHS";
+                                break;
+                            case 6:
+                                stagename = "VAC-3 MONTHS";
+                                break;
+                            case 7:
+                                stagename = "VAC-6 MONTHS";
+                                break;
+                            default:
+                                stagename = "-";
+                        }
+                        content += `<tr><td>${data[i].profile_id}&nbsp </td><td>${data[i].person_of_contact}&nbsp</td> <td> ${data[i].mobile_no}&nbsp</td> <td><input type = "button" class = ${data[i].profile_id}&nbsp onclick = click_call_in(this.className) value = "Click here"></td> <td><input type = "button" class = ${data[i].profile_id}&nbsp onclick = click_walk_in(this.className) value = "Click here"></td> <td>${stagename}&nbsp</td></tr>`;
+                    }
+                    document.getElementById('prosps_table').innerHTML = content;
+                } else if (request.status === 403) {
+                    alert('Something went wrong');
+                } else if (request.status === 500) {
+                    alert('Something went wrong on the server.');
+                } else {
+                    alert('Something else went wrong with the server.');
+                }
+
+            }
+        };
+        request.open('GET', '/viewprospects', true);
+        request.send(null);
+    };
+
+
+    //var click_call_in = document.getElementsByClassName('callin');
+    /*  click_call_in = function(poi_prof_id) {
+          var request = new XMLHttpRequest();
+          request.onreadystatechange = function() {
+              if (request.readyState === XMLHttpRequest.DONE) {
+                  if (request.status === 200) {
+                      click_call_in = "updating";
+                  } else if (request.status === 403) {
+                      alert('Something went wrong');
+                  } else if (request.status === 500) {
+                      alert('Something went wrong on the server');
+                  } else {
+                      alert('Something went wrong with the server');
+                  }
+              }
+          };
+          request.open('POST', '#', true); //request callin page
+          request.send(poi_prof_id); //send profile id
+      };
+
+      //var click_walk_in = document.getElementsByClassName('walkin');
+      click_walk_in = function(poi_prof_id) {
+          var request = new XMLHttpRequest();
+          request.onreadystatechange = function() {
+              if (request.readyState === XMLHttpRequest.DONE) {
+                  if (request.status === 200) {
+                      click_call_in = "updating";
+                  } else if (request.status === 403) {
+                      alert('Something went wrong');
+                  } else if (request.status === 500) {
+                      alert('Something went wrong on the server');
+                  } else {
+                      alert('Something went wrong with the server');
+                  }
+              }
+          };
+          request.open('POST', '#', true); //request walkin page
+          request.send(poi_prof_id); //send profile id
+      };*/
+
+    loadLogin();
+
+
+    my_prosps();
+</script>

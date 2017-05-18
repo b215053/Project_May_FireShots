@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Payment confirmation</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="col-sm-12" style="text-align:right">
+            <img src="/uploads/logol.jpg" style="float:left;height:60px;width:300px;margin-left:-60px" />
+
+            <div id="logout">
+                <br>
+
+            </div>
+        </div>
+    </div>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+
+            <ul class="nav navbar-nav">
+                <li><a href="/html/dashboard.html">Dashboard</a></li>
+                <li><a href="/html/leads.html">Leads</a></li>
+                <li><a href="#">Create New Enquiry</a></li>
+                <li><a href="/html/prospect.html">Prospects</a></li>
+                <li class="active"><a href="/html/payment.html">Payment</a></li>
+                <li><a href="#">Query</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+
+
+        <div class="col-sm-10">
+            <h1>Membership packages</h1>
+            <hr/>
+            <h3>Vivaah Classic Club <small>(Non-personalised)</small></h3>
+            <ul>
+                <li>6901/- (3 Months)</li>
+                <li>11901/- (6 Months)</li>
+                <li>16901/- (12 Months)</li>
+            </ul>
+            <br/>
+            <h3>Vivaah Advance Club <small>(Personalised)</small></h3>
+            <ul>
+                <li>15501/- (12 Months)</li>
+                <li>21501/- (6 Months)</li>
+            </ul>
+        </div>
+
+        <div class="col-sm-12"><br/><br/></div>
+
+        <div class="col-sm-2"></div>
+
+        <div class="col-sm-10">
+            <h2>Enter the required fields of the person of interest to confirm membership.</h2>
+            <br/>
+        </div>
+
+        <div class="col-sm-2"></div>
+
+        <div class="col-sm-4">
+            <form class="form-inline">
+                <div class="form-group">
+                    <label for="ph">Phone no.: </label>
+                    <input id="phone" type="text" class="form-control" name="phone_no" placeholder="enter phone no.">
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-4">
+            <form class="form-inline">
+                <div class="form-group">
+                    <label for="sel1">Membership package: </label>
+                    <select class="form-control" id="sel1">
+                            <option>unassigned</option>
+                            <option>VCC-3 months</option>
+                            <option>VCC-6 months</option>
+                            <option>VCC-12 months</option>
+                            <option>VAC-3 months</option>
+                            <option>VAC-6 months</option>
+                        </select>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-1">
+            <button type="button" class="btn" id="submit_btn">Confirm payment</button>
+        </div>
+
+    </div>
+
+</body>
+
+</html>
+
+<script type="text/javascript">
+    function loadLogin() {
+        // Check if the user is already logged in
+        var request = new XMLHttpRequest();
+        request.onreadystatechange = function() {
+            if (request.readyState === XMLHttpRequest.DONE) {
+                if (request.status === 200) {
+                    loadLoggedInUser(this.responseText);
+
+                }
+            }
+        };
+
+        request.open('GET', '/check-login', true);
+        request.send(null);
+    }
+
+    function loadLoggedInUser(username) {
+
+        document.getElementById("logout").innerHTML = `<p>Hi,${username}</p><a href="/logout">Logout</a>`;
+    }
+
+    loadLogin();
+
+    function updatestage() {
+
+        var click_submit_btn = document.getElementById("submit_btn");
+        click_submit_btn.onclick = function() {
+            var user_in_phone = document.getElementById("phone").value;
+            console.log(user_in_phone);
+            var request = new XMLHttpRequest();
+            request.onreadystatechange = function() {
+                if (request.readyState === XMLHttpRequest.DONE) {
+                    if (request.status === 200) {
+                        var res_str = JSON.parse(this.responseText);
+                        console.log(res_str);
+                        if (res_str === 1)
+                            alert('Mobile no verified !');
+                        else {
+                            alert('Mobile no not verified ');
+                            return;
+                        }
+                        var phone_no = document.getElementById("phone").value;
+                        var member_pack = document.getElementById("sel1");
+
+                        if ((phone_no.value === '') || (member_pack.value === 'unassigned')) {
+                            alert("Please enter valid inputs in all the fields... ");
+                            return;
+                        }
+                        console.log(phone_no);
+                        console.log(member_pack);
+                        click_submit_btn.value = 'validating';
+
+                        var req = new XMLHttpRequest();
+                        req.onreadystatechange = function() {
+                            if (req.readyState === XMLHttpRequest.DONE) {
+                                // Take some action
+                                if (req.status === 200) {
+                                    /*if((document.getElementById("phone_no").value==='')||(document.getElementById("sel1").value==="unassigned")){
+                                        alert("Please enter valid inputs...");
+                                        return;
+                                    }
+                                    else {
+                                        var phone_no = document.getElementById("phone_no");
+                                        var 
+                                        click_submit_btn.value = "validating";
+                                    }*/
+                                    alert("Membership confirmed");
+
+                                } else if (req.status === 403) {
+                                    alert('something went wrong');
+                                } else if (req.status === 500) {
+                                    alert('Something went wrong on the server');
+                                } else {
+                                    alert('Something went wrong on the server');
+                                }
+
+                            }
+                        };
+                        req.open('POST', '/updatestage', true); //link to update stage
+                        req.setRequestHeader('content-type', 'application/json');
+                        req.send(JSON.stringify({
+                            phone_no: phone_no,
+                            member_pack: member_pack
+                        }));
+
+                    } else {
+                        alert('Error in validating given phone no.!!!!');
+                        return '0';
+                    }
+                }
+            };
+            request.open('POST', '/check-phone', true);
+            request.setRequestHeader('Content-Type', 'application/json')
+            request.send(JSON.stringify({
+                user_in: user_in_phone
+            }));
+
+
+
+
+            //click_submit_btn.value = "Confirm payment";
+        };
+    }
+    updatestage();
+</script>

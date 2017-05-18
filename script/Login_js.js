@@ -1,5 +1,5 @@
 function changediv(user_name) {
-    var changedivtemp = `<h1> Hi ` + user_name + ` </h1><br><h1><a href="/logout"> Logout</a></h1>`;
+    var changedivtemp = `<h3> Hi ` + user_name + ` </h3><br><h3><a href="/html/dashboard.html"> Proceed</a></h3>`;
     document.getElementById('loginwindow').innerHTML = changedivtemp;
 
 }
@@ -10,9 +10,10 @@ function loadLogin() {
     request.onreadystatechange = function() {
         if (request.readyState === XMLHttpRequest.DONE) {
             if (request.status === 200) {
-                loadLoggedInUser(this.responseText);
+                // loadLoggedInUser(this.responseText);
                 changediv(this.responseText);
-            }
+            } else
+                loadLoginForm();
         }
     };
 
@@ -20,11 +21,11 @@ function loadLogin() {
     request.send(null);
 }
 
-function loadLoggedInUser(username) {
+/*function loadLoggedInUser(username) {
     var user_name = username;
 
     alert(`Login Successful`);
-}
+}*/
 
 function loadLoginForm() {
 
@@ -68,4 +69,4 @@ function loadLoginForm() {
 
     };
 }
-loadLoginForm();
+loadLogin();

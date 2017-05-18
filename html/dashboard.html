@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<style>
+
+</style>
+<html>
+
+<head>
+    <title>
+        Dashboard
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="col-sm-12" style="text-align:right">
+            <img src="/uploads/logol.jpg" style="float:left;height:60px;width:300px;margin-left:-60px" />
+
+            <div id="logout">
+                <br>
+
+            </div>
+        </div>
+    </div>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="/html/dashboard.html">Dashboard</a></li>
+                <li><a href="/html/leads.html">Leads</a></li>
+                <li><a href="#">Create New Enquiry</a></li>
+                <li><a href="/html/prospect.html">Prospects</a></li>
+                <li><a href="/html/payment.html">Payment</a></li>
+                <li><a href="#">Query</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="col-sm-2">
+            <div id="afterlogin">
+                <br>
+                <p><b>Leads </b><span id="countleads" class="badge"></span></p><br>
+                <p><b>Prospects </b><span id="countprospects" class="badge"></span></p>
+
+            </div>
+
+        </div>
+
+        <div class="col-sm-10">
+            <h4 style="text-decoration:underline"><b>Today's Appointments</b></h4>
+            <div style="height:195px;overflow:auto;background-color: aliceblue">
+                <table class="table table-condensed">
+
+                    <thead style="background-color:darkgrey">
+                        <tr>
+                            <th>ID</th>
+                            <th>Contact No</th>
+                            <th>Contact Date</th>
+                            <th>Call-in Update</th>
+                            <th>Walk-in Update</th>
+
+                        </tr>
+                    </thead>
+                    <tbody id='appoint'>
+
+                    </tbody>
+
+                </table>
+            </div>
+            <h4 style="text-decoration:underline"><b>Today's Follow-ups</b></h4>
+            <div style="height:195px;overflow:auto;background-color: azure">
+                <table class="table table-condensed">
+
+                    <thead style="background-color:darkgray">
+                        <tr>
+                            <th>ID</th>
+                            <th>Contact No</th>
+                            <th>Contact Date</th>
+                            <th>Call-in Update</th>
+                            <th>Walk-in Update</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="follow">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script>
+    $(function() {
+        $('[rel="popover"]').popover({
+            container: 'body',
+            html: true,
+            content: function() {
+                var clone = $($(this).data('popover-content')).clone(true).removeClass('hide');
+                return clone;
+            }
+        }).click(function(e) {
+            e.preventDefault();
+        });
+    });
+
+
+
+    myappoint = function() {
+        //var Today = new Date().now;
+        //console.log(Today);
+        var d = new Date();
+        var today = d.toDateString();
+        console.log(today);
+        var request = new XMLHttpRequest();
+        request.onreadystatechange = function() {
+            if (request.readyState === XMLHttpRequest.DONE) {
+
+                if (request.status === 200) {
+
+                    var aptcontent = '';
+                    var followcontent = '';
+                    var data = JSON.parse(this.responseText);
+                    // console.log(data);
+                    // console.log(data[0].next_followup_date);
+
+
+                    var i = 0;
+                    for (; i < data.length; i++) {
+                        var m = new Date(`${data[i].contact_date}`);
+                        // alert(data[i].appointment);
+                        var k = new Date(`${data[i].next_followup_date}`); //imp line of date conversion
+                        console.log(k.toDateString());
+                        if (k.toDateString() === today) {
+                            if (data[i].appointment === 1) {
+                                aptcontent += `<tr><td><button style="border-color:slategrey;border-radius:25px;background-color:white"><a href="profile.html" rel="popover" data-popover-content="#viewprofile">${data[i].profile_id}</button></a></td><td>${data[i].contact_no}</td><td>${m.toDateString()}</td><td><a style="color:navyblue" href="detailnew.html">Update</a></td><td><a href="detailnew.html">Update</a></td></tr>`;
+
+                            } else {
+                                // console.log('followup');
+                                followcontent += `<tr><td><button style="border-color:slategrey;border-radius:25px;background-color:white"><a href="profile.html" rel="popover" data-popover-content="#viewprofile">${data[i].profile_id}</button></a></td><td>${data[i].contact_no}</td><td>${m.toDateString()}</td><td><a style="color:navyblue" href="detailnew.html">Update</a></td><td><a href="detailnew.html">Update</a></td></tr>`;
+                            }
+                        }
+
+                    }
+                    // console.log('f content' + followcontent);
+                    document.getElementById('appoint').innerHTML = aptcontent;
+                    document.getElementById('follow').innerHTML = followcontent;
+                } else if (request.status === 403) {
+                    alert('something went wrong on the server');
+                } else if (request.status === 500) {
+                    alert('Something went wrong on the server');
+
+                } else {
+
+                    alert('Something went wrong');
+
+                }
+            }
+        };
+        request.open('GET', '/displayapt', true);
+        request.send(null);
+
+    }
+
+    function loadLoggedInUser(username) {
+
+        document.getElementById("logout").innerHTML = `<p>Hi,${username}</p><a href="/logout">Logout</a>`;
+
+    }
+
+    function leads() {
+        var request = new XMLHttpRequest();
+        request.onreadystatechange = function() {
+            if (request.readyState === XMLHttpRequest.DONE) {
+                if (request.status === 200) {
+                    var l = this.responseText;
+                    document.getElementById("countleads").innerHTML = l;
+
+
+                }
+
+            }
+        };
+
+        request.open('GET', '/leadscount', true);
+        request.send(null);
+
+
+    }
+
+    function prospects() {
+        var request = new XMLHttpRequest();
+        request.onreadystatechange = function() {
+            if (request.readyState === XMLHttpRequest.DONE) {
+                if (request.status === 200) {
+                    var p = this.responseText;
+                    document.getElementById("countprospects").innerHTML = p;
+
+
+                }
+
+            }
+        };
+
+        request.open('GET', '/prospectscount', true);
+        request.send(null);
+
+    }
+
+    function loadLogin() {
+        // Check if the user is already logged in
+        var request = new XMLHttpRequest();
+        request.onreadystatechange = function() {
+            if (request.readyState === XMLHttpRequest.DONE) {
+                if (request.status === 200) {
+                    loadLoggedInUser(this.responseText);
+
+                }
+
+            }
+        };
+
+        request.open('GET', '/check-login', true);
+        request.send(null);
+    }
+    loadLogin();
+    leads();
+    prospects();
+    myappoint();
+</script>
