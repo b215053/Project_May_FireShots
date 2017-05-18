@@ -31,7 +31,7 @@ CREATE TABLE "user_details" (
   "caste" text NOT NULL,
   "linkedin_id" text NOT NULL,
   "religion" text NOT NULL,
-  "mother_tounge" text NOT NULL,
+  "mother_tongue" text NOT NULL,
   "family_type" text NOT NULL,
   "gotra" text NOT NULL,
   "manglik" text NOT NULL,
