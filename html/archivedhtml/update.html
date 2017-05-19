@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<style>
+
+</style>
+<html>
+
+<head>
+    <title>
+        Call/Walkin Update
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="col-sm-12" style="text-align:right">
+            <img src="/uploads/logol.jpg" style="float:left;height:60px;width:300px;margin-left:-60px" />
+
+            <div id="logout">
+                <br>
+
+            </div>
+        </div>
+    </div>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+
+            <ul class="nav navbar-nav">
+                <li><a href="/html/dashboard.html">Dashboard</a></li>
+                <li><a href="/html/leads.html">Leads</a></li>
+                <li><a href="/html/enquiry2.html">Create New Enquiry</a></li>
+                <li><a href="/html/prospect.html">Prospects</a></li>
+                <li><a href="/html/payment.html">Payment</a></li>
+                <li><a href="/html/query.html">Payment</a></li>
+
+            </ul>
+
+        </div>
+
+    </nav>
+    <div class="container">
+        <h4 style="text-decoration:underline;text-align:center"><b>Previous History</b></h4>
+        <div class="col-sm-12" id="olddetails">
+        </div>
+    </div>
+    <div class="container" style="background-color:azure">
+        <h4 style="text-decoration:underline;text-align:center"><b>Call/Walk-in Update</b></h4>
+        <div class="col-sm-12" id="calldetails">
+
+            <form class="form-horizontal" action="/checkupdate" method="POST">
+                <div class="form-group">
+                    <label class="col-sm-2" for="profile_id">Profile ID:</label>
+                    <div class="col-sm-offset -2 col-sm-10">
+
+                        <label><input type="text" name="profile_id"></label>
+
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2" for="type">Type:</label>
+                    <div class="col-sm-offset -2 col-sm-10">
+
+                        <label><input type="checkbox" name="type" value="0"> Call</label>
+                        <label><input type="checkbox" name="type" value="1"> Walk-in</label>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2" for="mobile">Phone:</label>
+
+                    <div class="col-sm-10" id="myphone">
+                        <input type="mobile" class="form-control" id="phone" name="mob_no" placeholder="Enter Contact No.">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2" for="contacteddate">Contacted On:</label>
+                    <div class="col-sm-10" id="contact">
+                        <input type="text" class="form-control" placeholder="Format (YYYY-MM-DD)" name="cdate" </input>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2" for="calldetail">Call Details:</label>
+                    <div class="col-sm-10">
+                        <textarea class="form-control" rows="5" name="call_details" placeholder="Enter Call Details"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2" for="interaction">Interaction Type:</label>
+                    <div class="col-sm-offset -2 col-sm-10">
+
+                        <label><input type="checkbox" name="itype" value="outbound"> Outbound</label>
+                        <label><input type="checkbox" name="itype" value="inbound"> Inbound</label>
+                        <label><input type="checkbox" name="itype" value="walkin"> Walk-in</label>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="col-sm-2" for="callresponse">Call Response:</label>
+                    <div class="col-sm-offset -2 col-sm-10">
+
+                        <label><input type="checkbox" name="response" value="ptp" > PTP</label>
+                        <label><input type="checkbox" name="response" value="nrpc"> NRPC</label>
+                        <label><input type="checkbox" name="response" value="callback"> CallBack</label>
+                        <label><input type="checkbox" name="response" value="not interested"> Not Interested</label>
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2" for="appointment">Appointment :</label>
+                    <div class="col-sm-offset -2 col-sm-10">
+
+                        <label><input type="checkbox" name="apt" value="0" > No Appointment</label>
+
+                        <label><input type="checkbox" name="apt" value="1"> Schedule Appointment</label>
+                    </div>
+                </div>
+
+
+
+                <div class="form-group">
+                    <label class="col-sm-2" for="stage">Stage:</label>
+                    <div class="col-sm-offset -2 col-sm-10">
+
+                        <label><input type="checkbox" name="stage" value="0"> Lead</label>
+                        <label><input type="checkbox" name="stage" value="1"> Prospect</label>
+                        <label><input type="checkbox" name="stage" value="2"> Opportunity</label>
+                        <label><input type="checkbox" name="stage" value="3"> Membership</label>
+
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="col-sm-2" for="followupdate">Next Follow Up Date:</label>
+                    <div class="col-sm-10" id="followup">
+
+                        <input type="text" class="form-control" placeholder="Format (YYYY-MM-DD)" name="fdate" </input>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-5 col-sm-12">
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+
+
+
+
+
+    <script>
+        function memberdetails() {
+            var request = new XMLHttpRequest();
+            request.onreadystatechange = function() {
+                if (request.readyState === XMLHttpRequest.DONE) {
+
+                    if (request.status === 200) {
+
+                        var content = '';
+                        var data = JSON.parse(this.responseText);
+                        var i = 0;
+                        for (; i < data.length; i++) {
+                            if (data[i].type_call_walkin === 1) {
+                                content += `<p> <b>Type: Call</b></p>
+                            <p><b>Contact: ${data[i].contact_no}</b></p>
+                            <p><b>Last Follow-up Date: ${data[i].contact_date}</b></p>
+                            <p><b>Interaction Type: ${data[i].interaction_type}</b></p>
+                            <p><b>Response Type: ${data[i].call_walkin_response}</b></p>
+                            <p><b>Call/Walk-in Details: ${data[i].call_walkin_details}</b></p>`;
+                            } else {
+                                content += `<p> <b>Type: Walk-in</b></p>
+                            <p><b>Contact: ${data[i].contact_no}</b></p>
+                            <p><b>Last Follow-up Date: ${data[i].contact_date}</b></p>
+                            <p><b>Interaction Type: ${data[i].interaction_type}</b></p>
+                            <p><b>Response Type: ${data[i].call_walkin_response}</b></p>
+                            <p><b>Call/Walk-in Details: ${data[i].call_walkin_details}</b></p>`;
+                            }
+
+
+                        }
+
+                        document.getElementById('appoint').innerHTML = aptcontent;
+                    } else if (request.status === 403) {
+                        alert('something went wrong on the server');
+                    } else if (request.status === 500) {
+                        alert('Something went wrong on the server');
+
+                    } else {
+
+                        alert('Something went wrong');
+
+                    }
+                }
+            };
+            request.open('GET', '/displayapt', true);
+            request.send(null);
+
+            var content = `
+                           <p> <b>Type: </b></p>
+                            <p><b>Contact: </b></p>
+                            <p><b>Last Follow-up Date: </b></p>
+                            <p><b>Interaction Type: </b></p>
+                            <p><b>Response Type: </b></p>
+                            <p><b>Call/Walk-in Details: </b></p>
+                            `;
+            document.getElementById("olddetails").innerHTML = content;
+        }
+        memberdetails();
+
+
+        function loadLoggedInUser(username) {
+
+            document.getElementById("logout").innerHTML = `<p>Hi,${username}</p><a href='/logout'>Logout</a>`;
+
+        }
+
+        function loadLogin() {
+            // Check if the user is already logged in
+            var request = new XMLHttpRequest();
+            request.onreadystatechange = function() {
+                if (request.readyState === XMLHttpRequest.DONE) {
+                    if (request.status === 200) {
+                        loadLoggedInUser(this.responseText);
+
+                    }
+
+                }
+            };
+
+            request.open('GET', '/check-login', true);
+            request.send(null);
+        }
+        loadLogin();
+    </script>
+</body>
+
+</html>

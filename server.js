@@ -27,6 +27,14 @@ app.use(session({
     secret: 'VCBYFireShots',
     cookie: { maxAge: 1000 * 60 * 60 * 24 * 30 }
 }));
+//following url encoded for form element post data parsing
+/** bodyParser.urlencoded(options)
+ * Parses the text as URL encoded data (which is how browsers tend to send form data from regular forms set to POST)
+ * and exposes the resulting object (containing the keys and values) on req.body
+ */
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 app.use(bodyParser.json());
 app.use(morgan('short'));
 //for photo upload 5
@@ -144,6 +152,70 @@ app.post('/login', function(req, res) {
         }
     });
 });
+app.post('/quickadd',function(req,res){
+   var pid= req.body.pid;
+    var mob_no=req.body.mob_no;
+    var email= req.body.email;
+    var person_of_c = req.body.person_of_c;
+    var relation = req.body.relation;
+    var address= req.body.address;
+    var city = req.body.city;
+    var gender=req.body.gender;
+    var username = req.session.auth.username;
+    var stage=0;
+    
+    pool.query('insert into user_details (profile_id,person_of_contact,mobile_no,email,address,relation_with_candidate,city,gender) values($1,$2,$3,$4,$5,$6,$7,$8)',[pid,person_of_c,mob_no,email,address,relation,city,gender],function(err,result){
+       if(err)
+           {
+               res.status(500).send(err.toString()+'<br><h3>Kindly Go Back on your browser and take required measures</h3>');
+           }
+        else
+            {
+                
+                pool.query('insert into user_status values ($1,$2,$3,$4,$5)',[pid,person_of_c,mob_no,username,stage],function(err,result){
+                   if(err)
+                       {
+                           res.status(500).send(err.toString()+'<br><h3>Kindly Go Back on your browser and take required measures</h3>')
+                       }
+                    else
+                        {
+                            var htmltemplate = ` <h3> Profile Successfully Added </h3><br><a href="/html/dashboard.html">Click to go on Dashboard !</a>`;
+                res.send(htmltemplate);
+                        }
+                });
+                
+            }
+    });
+    
+});
+app.get('/user_details/:id',function(req,res){
+   var pid= req.params.id;
+    
+    pool.query('select * from user_details where profile_id=$1',[pid],function(err,result){
+        if(err)
+            {
+                res.status(500).send(err.toString());
+            }
+        else
+            {
+                res.send(JSON.stringify(result.rows));
+            }
+    });
+});
+app.get('/callhistory/:id',function(req,res){
+   var pid= req.params.id;
+    
+    pool.query('select * from call_walkin_history where profile_id=$1',[pid],function(err,result){
+        if(err)
+            {
+                res.status(500).send(err.toString());
+            }
+        else
+            {
+                res.send(JSON.stringify(result.rows));
+            }
+    });
+});
 app.get('/displayapt',function(req,res){
    
    pool.query('select * from call_walkin_history',function(err,result){
@@ -174,6 +246,57 @@ app.get('/checkpopup',function(req,res){
            }
    }) ;
 });
+app.post('/checkupdate',function(req,res){
+    var profile_id=req.body.profile_id;
+   var type =  req.body.type;
+    var mob_no=req.body.mob_no;
+    var contact_date = req.body.cdate;
+    var call_details = req.body.call_details;
+    var itype= req.body.itype;
+    var call_resp= req.body.response;
+    var apt= req.body.apt;
+    var next_date= req.body.fdate;
+    var stage= req.body.stage;
+    
+  /*  console.log('pid'+profile_id);
+    console.log('type'+type);
+    console.log(mob_no);
+    console.log(contact_date);
+    console.log(call_details);
+    console.log(itype);
+    console.log(call_resp);
+    console.log(apt);
+    console.log(next_date);
+    console.log(stage);
+    res.end();*/
+    pool.query('insert into call_walkin_history values($1,$2,$3,$4,$5,$6,$7,$8,$9)',[profile_id,contact_date,mob_no,call_details,itype,call_resp,next_date,apt,type],function(err,result){
+       if(err)
+           {
+               res.staus(500).send(err.toString());
+           }
+        else
+            {  
+                if(stage==='3'||stage==='4')
+                {
+                   res.redirect('/html/dashboard.html');
+                    
+                }
+             else
+                 {
+                pool.query('update user_status set stage=$1 where profile_id=$2',[stage,profile_id],function(err,result){
+                   if(err)
+                       {
+                           res.staus(500).send(err.toString());
+                       }
+                    else
+                        {
+                            res.redirect('/html/dashboard.html');
+                        }
+                });
+                 }
+            }
+    });
+});
 app.get('/cwupdate/:id',function(req,res){
    
     var pid= req.params.id;
@@ -186,14 +309,13 @@ app.get('/cwupdate/:id',function(req,res){
 
 <head>
     <title>
-Call/Walkin Update 
+        Call/Walkin Update
     </title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
 </head>
 
 <body>
@@ -211,11 +333,12 @@ Call/Walkin Update
         <div class="container-fluid">
 
             <ul class="nav navbar-nav">
-                <li class="active"><a href="/html/dashboard.html">Dashboard</a></li>
+                <li><a href="/html/dashboard.html">Dashboard</a></li>
                 <li><a href="/html/leads.html">Leads</a></li>
-                <li><a href="#">Create New Enquiry</a></li>
-                <li><a href="/html/prospect">Prospects</a></li>
-                <li><a href="/html/payment">Payment</a></li>
+                <li><a href="/html/enquiry2.html">Create New Enquiry</a></li>
+                <li><a href="/html/prospect.html">Prospects</a></li>
+                <li><a href="/html/payment.html">Payment</a></li>
+                <li><a href="/html/query.html">Payment</a></li>
 
             </ul>
 
@@ -223,16 +346,24 @@ Call/Walkin Update
 
     </nav>
     <div class="container">
-        <h4 style="text-decoration:underline;text-align:center"><b>Previous History for profile ID:&nbsp<span id='pid'>${pid}</span></b></h4>
-     
-<div class="col-sm-12" id="olddetails">
+        <h4 style="text-decoration:underline;text-align:center"><b>Previous History for Profile ID:<span id="pid">${pid}</span> </b></h4>
+        <div class="col-sm-12" id="olddetails">
         </div>
     </div>
     <div class="container" style="background-color:azure">
         <h4 style="text-decoration:underline;text-align:center"><b>Call/Walk-in Update</b></h4>
         <div class="col-sm-12" id="calldetails">
 
-            <form class="form-horizontal">
+            <form class="form-horizontal" action="/checkupdate" method="POST">
+                <div class="form-group">
+                    <label class="col-sm-2" for="profile_id">Profile ID:</label>
+                    <div class="col-sm-offset -2 col-sm-10">
+
+                        <label><input type="text" name="profile_id" value="${pid}"></label>
+
+
+                    </div>
+                </div>
                 <div class="form-group">
                     <label class="col-sm-2" for="type">Type:</label>
                     <div class="col-sm-offset -2 col-sm-10">
@@ -246,82 +377,20 @@ Call/Walkin Update
                     <label class="col-sm-2" for="mobile">Phone:</label>
 
                     <div class="col-sm-10" id="myphone">
-                        <input type="mobile" class="form-control" id="phone" placeholder="Enter Contact No.">
+                        <input type="mobile" class="form-control" id="phone" name="mob_no" placeholder="Enter Contact No.">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-2" for="contacteddate">Contacted On:</label>
                     <div class="col-sm-10" id="contact">
-                        <select>
-                <option>Date</option>
-                <option  name="cdate" value="01">01</option>
-                <option name="cdate" value="02">02</option>
-                <option name="cdate" value="03">03</option>
-                <option name="cdate" value="04">04</option>
-                <option name="cdate" value="05">05</option>
-                <option name="cdate" value="06">06</option>
-                <option name="cdate" value="07">07</option>
-                <option name="cdate" value="08">08</option>
-                <option name="cdate" value="09">09</option>
-                <option name="cdate" value="10">10</option>
-                <option name="cdate" value="11">11</option>
-                <option name="cdate" value="12">12</option>
-                <option name="cdate" value="13">13</option>
-                <option name="cdate" value="14">14</option>
-                <option name="cdate" value="15">15</option>
-                <option name="cdate" value="16">16</option>
-                <option name="cdate" value="17">17</option>
-                <option name="cdate" value="18">18</option>
-                <option name="cdate" value="19">19</option>
-                <option name="cdate" value="20">20</option>
-                <option name="cdate" value="21">21</option>
-                <option name="cdate" value="22">22</option>
-                <option name="cdate" value="23">23</option>
-                <option name="cdate" value="24">24</option>
-                <option name="cdate" value="25">25</option>
-                <option name="cdate" value="26">26</option>
-                <option name="cdate" value="27">27</option>
-                <option name="cdate" value="28">28</option>
-                <option name="cdate" value="29">29</option>
-                <option name="cdate" value="30">30</option>
-                <option name="cdate" value="31">31</option>
-                </select>
-                        <select>
-                <option>Month</option>
-                <option  name="cmonth" value="01">01</option>
-                <option  name="cmonth" value="02">02</option>
-                <option  name="cmonth" value="03">03</option>
-                <option  name="cmonth" value="04">04</option>
-                <option  name="cmonth" value="05">05</option>
-                <option  name="cmonth" value="06">06</option>
-                <option  name="cmonth" value="07">07</option>
-                <option  name="cmonth" value="08">08</option>
-                <option  name="cmonth" value="09">09</option>
-                <option  name="cmonth" value="10">10</option>
-                <option  name="cmonth" value="11">11</option>
-                <option  name="cmonth" value="12">12</option>
-                </select>
-                        <select>
-                <option>Year</option>
-                <option  name="cyear" value="2016">2016</option>
-                <option  name="cyear" value="2017">2017</option>
-                <option  name="cyear" value="2018">2018</option>
-                <option  name="cyear" value="2019">2019</option>
-                <option  name="cyear" value="2020">2020</option>
-                <option  name="cyear" value="2021">2021</option>
-                <option  name="cyear" value="2022">2022</option>
-                <option  name="cyear" value="2023">2023</option>
-                <option  name="cyear" value="2024">2024</option>
-                <option  name="cyear" value="2025">2025</option>
-                </select>
-
+                        <input type="text" class="form-control" placeholder="Format (YYYY-MM-DD)" name="cdate" </input>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="col-sm-2" for="calldetail">Call Details:</label>
                     <div class="col-sm-10">
-                        <textarea class="form-control" rows="5" id="calldetail" placeholder="Enter Call Details"></textarea>
+                        <textarea class="form-control" rows="5" name="call_details" placeholder="Enter Call Details"></textarea>
                     </div>
                 </div>
 
@@ -344,19 +413,21 @@ Call/Walkin Update
                         <label><input type="checkbox" name="response" value="nrpc"> NRPC</label>
                         <label><input type="checkbox" name="response" value="callback"> CallBack</label>
                         <label><input type="checkbox" name="response" value="not interested"> Not Interested</label>
-                        
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2" for="appointment">Appointment :</label>
+                    <div class="col-sm-offset -2 col-sm-10">
+
+                        <label><input type="checkbox" name="apt" value="0" > No Appointment</label>
+
+                        <label><input type="checkbox" name="apt" value="1"> Schedule Appointment</label>
                     </div>
                 </div>
 
-                 <div class="form-group">
-                    <label class="col-sm-2" for="appointment">Appointment :</label>
-                    <div class="col-sm-offset -2 col-sm-10">
-                        <label><input type="checkbox" id="apt" value="1"> Schedule Appointment</label>
-                    </div>
 
-                    </div>
-                
-                
+
                 <div class="form-group">
                     <label class="col-sm-2" for="stage">Stage:</label>
                     <div class="col-sm-offset -2 col-sm-10">
@@ -364,7 +435,8 @@ Call/Walkin Update
                         <label><input type="checkbox" name="stage" value="0"> Lead</label>
                         <label><input type="checkbox" name="stage" value="1"> Prospect</label>
                         <label><input type="checkbox" name="stage" value="2"> Opportunity</label>
-                        <label><input type="checkbox" name="stage" value="3"> Membership</label>
+                        <label><input type="checkbox" name="stage" value="3"> Already Member</label>
+                        <label><input type="checkbox" name="stage" value="4"> Retain Stage </label>
 
                     </div>
                 </div>
@@ -373,75 +445,14 @@ Call/Walkin Update
                 <div class="form-group">
                     <label class="col-sm-2" for="followupdate">Next Follow Up Date:</label>
                     <div class="col-sm-10" id="followup">
-                        <select>
-                <option>Date</option>
-                <option  name="fdate" value="01">01</option>
-                <option name="fdate" value="02">02</option>
-                <option name="fdate" value="03">03</option>
-                <option name="fdate" value="04">04</option>
-                <option name="fdate" value="05">05</option>
-                <option name="fdate" value="06">06</option>
-                <option name="fdate" value="07">07</option>
-                <option name="fdate" value="08">08</option>
-                <option name="fdate" value="09">09</option>
-                <option name="fdate" value="10">10</option>
-                <option name="fdate" value="11">11</option>
-                <option name="fdate" value="12">12</option>
-                <option name="fdate" value="13">13</option>
-                <option name="fdate" value="14">14</option>
-                <option name="fdate" value="15">15</option>
-                <option name="fdate" value="16">16</option>
-                <option name="fdate" value="17">17</option>
-                <option name="fdate" value="18">18</option>
-                <option name="fdate" value="19">19</option>
-                <option name="fdate" value="20">20</option>
-                <option name="fdate" value="21">21</option>
-                <option name="fdate" value="22">22</option>
-                <option name="fdate" value="23">23</option>
-                <option name="fdate" value="24">24</option>
-                <option name="fdate" value="25">25</option>
-                <option name="fdate" value="26">26</option>
-                <option name="fdate" value="27">27</option>
-                <option name="fdate" value="28">28</option>
-                <option name="fdate" value="29">29</option>
-                <option name="fdate" value="30">30</option>
-                <option name="fdate" value="31">31</option>
-                </select>
-                        <select>
-                <option>Month</option>
-                <option  name="fmonth" value="01">01</option>
-                <option  name="fmonth" value="02">02</option>
-                <option  name="fmonth" value="03">03</option>
-                <option  name="fmonth" value="04">04</option>
-                <option  name="fmonth" value="05">05</option>
-                <option  name="fmonth" value="06">06</option>
-                <option  name="fmonth" value="07">07</option>
-                <option  name="fmonth" value="08">08</option>
-                <option  name="fmonth" value="09">09</option>
-                <option  name="fmonth" value="10">10</option>
-                <option  name="fmonth" value="11">11</option>
-                <option  name="fmonth" value="12">12</option>
-                </select>
-                        <select>
-                <option>Year</option>
-                <option  name="fyear" value="2016">2016</option>
-                <option  name="fyear" value="2017">2017</option>
-                <option  name="fyear" value="2018">2018</option>
-                <option  name="fyear" value="2019">2019</option>
-                <option  name="fyear" value="2020">2020</option>
-                <option  name="fyear" value="2021">2021</option>
-                <option  name="fyear" value="2022">2022</option>
-                <option  name="fyear" value="2023">2023</option>
-                <option  name="fyear" value="2024">2024</option>
-                <option  name="fyear" value="2025">2025</option>
-                </select>
 
+                        <input type="text" class="form-control" placeholder="Format (YYYY-MM-DD)" name="fdate" </input>
                     </div>
                 </div>
-                
+                <div class="form-group">
                     <div class="col-sm-offset-5 col-sm-12">
-                        <input type="submit" id="submitbtn" value="Submit">
-                    
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </div>
 
                 </div>
 
@@ -457,6 +468,56 @@ Call/Walkin Update
 </html>` ;
     res.send(htmltemplate);
 });
+app.get('/allleadscount',function(req,res){
+   pool.query('select * from user_status where stage=0',function(err,result){
+       if(err)
+           {
+               res.status(500).send(err.toString());
+           }
+       else
+           {
+               res.send(JSON.stringify(result.rows.length));
+           }
+   }) ;
+});
+app.get('/allprospectscount',function(req,res){
+   pool.query('select * from user_status where stage=1',function(err,result){
+       if(err)
+           {
+               res.status(500).send(err.toString());
+           }
+       else
+           {
+               res.send(JSON.stringify(result.rows.length));
+           }
+   }) ;
+});
+app.get('/allopportunitycount',function(req,res){
+   pool.query('select * from user_status where stage=2',function(err,result){
+       if(err)
+           {
+               res.status(500).send(err.toString());
+           }
+       else
+           {
+               res.send(JSON.stringify(result.rows.length));
+           }
+   }) ;
+});
+app.get('/allmemberscount',function(req,res){
+   pool.query('select * from user_status where stage>=3',function(err,result){
+       if(err)
+           {
+               res.status(500).send(err.toString());
+           }
+       else
+           {
+               res.send(JSON.stringify(result.rows.length));
+           }
+   }) ;
+});
+
+
 app.get('/getlatest',function(req,res){
    pool.query('select * from call_walkin_history ',function(err,result){
        if(err)
@@ -471,27 +532,7 @@ app.get('/getlatest',function(req,res){
            }
    }) ;
 });
-app.post('/updatecallwalk',function(req,res){
-   var profile_id = req.body.profile_id;
-    var contact_date=req.body.contact_date;
-    var contact_no=req.body.contact_no;
-    var calldetails=req.body.call_walkin_details;
-    var interaction_type=req.body.interaction_type;
-    var call_walkin_response= req.body.call_walkin_response;
-    var nextdate = req.body.next_followup_date;
-    var appointment=req.body.appointment;
-    var type=req.body.type_call_walkin;
-    pool.query('insert into call_walkin_history values ($1,$2,$3,$4,$5,$6,$7,$8,$9)',[profile_id,contact_date,contact_no,calldetails,interaction_type,call_walkin_response,nextdate,appointment,type],function(err,result){
-       if(err)
-           {
-               res.status(500).send(err.toString());
-           }
-        else
-            {
-                res.send('successfully added !');
-            }
-    });
-});
+
 app.get('/check-login', function(req, res) {
     if (req.session && req.session.auth && req.session.auth.username) {
         // Load the user object

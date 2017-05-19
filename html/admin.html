@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Admin Console</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="/css/admin_css.css">
+</head>
+
+<body>
+
+
+
+
+    <div id="title">
+        <h1>ADMIN CONSOLE</h1>
+    </div>
+
+    <div class=report-full>
+        <div class="report">
+            <h2>CURRENT REPORT</h2>
+        </div>
+
+        <div class="headings">
+            <p>
+                Leads:<span id="leads"></span><br>Prospects:<span id="prospects"></span><br>Opportunities:<span id="opportunity"></span><br>Membership:<span id="membership"></span>
+            </p>
+        </div>
+    </div>
+
+    <div class="new_user">
+        <h2>CREATE NEW USER</h2>
+        <label class="username_text" for="username">USER ID</label>
+        <div class="username_box">
+            <input type="text" placeholder="Enter USER ID" id="username">
+        </div>
+        <label class="password" for="password">PASSWORD</label>
+        <div class="password_box">
+            <input type="password" placeholder="Enter password" id="password">
+        </div>
+        <button type="submit" class="btn-default" id="registerbtn">Submit</button>
+    </div>
+
+
+    <div class="logout">
+        <span><a href="/logout">Logout</a></span>
+    </div>
+
+    <script type="text/javascript" src="/script/admin_js.js"></script>
+</body>
+
+</html>

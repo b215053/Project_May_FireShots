@@ -1,6 +1,11 @@
 function changediv(user_name) {
-    var changedivtemp = `<h3> Hi ` + user_name + ` </h3><br><h3><a href="/html/dashboard.html"> Proceed</a></h3>`;
-    document.getElementById('loginwindow').innerHTML = changedivtemp;
+    if (user_name === 'admin') {
+        var changedivtemp = `<h3> Hi ` + user_name + ` </h3><br><h3><a href="/html/admin.html"> Proceed</a></h3>`;
+        document.getElementById('loginwindow').innerHTML = changedivtemp;
+    } else {
+        var changedivtemp = `<h3> Hi ` + user_name + ` </h3><br><h3><a href="/html/dashboard.html"> Proceed</a></h3>`;
+        document.getElementById('loginwindow').innerHTML = changedivtemp;
+    }
 
 }
 

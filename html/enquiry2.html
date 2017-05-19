@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <style></style>
+    <title></title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+</head>
+
+
+<body>
+    <div class="container">
+        <div class="col-sm-12" style="text-align:right">
+            <img src="/uploads/logol.jpg" style="float:left;height:60px;width:300px;margin-left:-60px" />
+
+            <div id="logout">
+                <br>
+
+            </div>
+        </div>
+    </div>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+
+            <ul class="nav navbar-nav">
+                <li><a href="/html/dashboard.html">Dashboard</a></li>
+                <li><a href="/html/leads.html">Leads</a></li>
+                <li class="active"><a href="/html/enquiry2.html">Create New Enquiry</a></li>
+                <li><a href="/html/prospect.html">Prospects</a></li>
+                <li><a href="/html/payment.html">Payment</a></li>
+                <li><a href="/html/query.html">Query</a></li>
+            </ul>
+        </div>
+    </nav>
+
+
+
+    <div class="container-fluid" style="background-color:darkgrey">
+
+        <h3 class="text-center">CREATE NEW ENQUIRY</h3>
+
+    </div><br>
+    <div class="container-fluid">
+
+        <div class="btn-group btn-group-justified">
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary btn-lg"><a href="/html/quickadd.html" style="color:white">Quick Add</a></button>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary btn-lg"><a href="#" style="color:white">Full Add</a></button>
+            </div>
+
+        </div>
+    </div>
+    <script type="text/javascript">
+        function loadLoggedInUser(username) {
+
+            document.getElementById("logout").innerHTML = `<p>Hi,${username}</p><a href="/logout">Logout</a>`;
+
+        }
+
+        function loadLogin() {
+            // Check if the user is already logged in
+            var request = new XMLHttpRequest();
+            request.onreadystatechange = function() {
+                if (request.readyState === XMLHttpRequest.DONE) {
+                    if (request.status === 200) {
+                        loadLoggedInUser(this.responseText);
+
+                    }
+
+                }
+            };
+
+            request.open('GET', '/check-login', true);
+            request.send(null);
+        }
+        loadLogin();
+    </script>
+</body>
+
+</html>

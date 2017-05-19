@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <style>
+        .btn-custom {
+            color: white;
+            background-color: black;
+            border-color: #483737;
+        }
+        
+        .btn.btn-custom:hover {
+            color: white;
+            background-color: #45a049;
+            border-color: #837171;
+            border-radius: 8 px;
+            transform: scale(1.015);
+        }
+    </style>
+
+
+    <title>Quick Add</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+</head>
+
+
+<body>
+    <div class="container" style="background-image: linear-gradient(logol1.png)">
+        <img src="/uploads/logol.jpg" class="img-responsive" style="float:left;height:60px;width:300px" />
+
+
+    </div><br>
+
+    <div class="container-fluid" style="background-color:black">
+
+        <h3 class="text-center" style="font-family:roboto;color:white">QUICK ADD</h3>
+
+    </div><br>
+
+    <div class="container" style="background-color:#f2f2f2;letter-spacing: 1.5px;font-size: 18px;font-family:roboto">
+
+        <p>* indicates that it is a mandatory field (You must be logged in before submitting the form.)</p>
+        <p> All entries should be in Block letters only otherwise it may lead to search error</p>
+        <p> <a href="/html/dashboard.html">Click to go Dashboard</a></p>
+        <form action="/quickadd" method="POST">
+
+
+
+            <div class="form-group" style="letter-spacing: 1.5px;font-size: 18px;font-family:roboto">
+                <label for="profid">*Profile ID</label><br>
+                <input class="form-control input-lg" type="text" id="pr_id" name="pid" placeholder="Profile ID" required><br>
+                <input type="submit" value="Regenerate ID" onclick="id_write();">
+                <br>
+
+
+                <label for="mob">*Mobile Number</label><br>
+                <input class="form-control input-lg" type="text" id="mob" name="mob_no" placeholder="Client's Mobile Number" required><br>
+
+
+
+                <label for="gen">*Gender</label><br>
+                <input class="form-control input-lg" type="text" name="gender" placeholder="Client's Gender" required><br>
+
+
+
+                <label for="email">*E-Mail ID</label><br>
+                <input class="form-control input-lg" type="text" id="email" name="email" placeholder="Client's E-mail" required><br>
+
+
+
+                <label for="personcontacted">*Person Of Contact</label><br>
+                <input class="form-control input-lg" type="text" id="personcontacted" name="person_of_c" placeholder="Name Of Person Contacted" required><br>
+
+
+
+                <label for="rel">*Relation With Candidate</label><br>
+                <input class="form-control input-lg" type="text" id="rel" name="relation" placeholder="Father, Mother, Brother, Self, etc..." required><br>
+
+
+
+                <label for="Address">*Address</label><br>
+                <input class="form-control input-lg" type="text" id="Address" name="address" placeholder="Plot No., Street Number,Landmark..." required><br>
+
+
+
+                <label for="city">*City</label><br>
+                <input class="form-control input-lg" type="text" id="city" name="city" placeholder="City" required><br>
+
+
+
+
+
+                <input class="btn btn-custom btn-lg btn-block" type="submit" value="REGISTER">
+            </div>
+
+        </form>
+    </div>
+
+    <script type="text/javascript">
+        function id_write() // to write automatic ids when new ids are created 
+        {
+            var request = new XMLHttpRequest();
+            request.onreadystatechange = function() {
+                if (request.readyState === XMLHttpRequest.DONE) {
+                    // Take some action
+                    if (request.status === 200) {
+                        var data = JSON.parse(this.responseText);
+                        var actual_id = 'VC' + data[0].id;
+                        document.getElementById('pr_id').value = actual_id;
+                        //pid_write();
+                    } else if (request.status === 403) {
+                        display_btn.value = 'something went wrong';
+                    } else if (request.status === 500) {
+                        alert('Something went wrong on the server');
+
+                    } else {
+                        alert('Something went wrong on the server');
+
+                    }
+
+                }
+
+            };
+
+            // Make the request
+            request.open('GET', '/autoid', true);
+            request.send(null);
+        }
+        id_write();
+    </script>
+
+
+</body>
+
+</html>

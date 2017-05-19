@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<style>
+    input[type=text],
+    select {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+    
+    input,
+    input::-webkit-input-placeholder {
+        font-size: 14px;
+        letter-spacing: 1.3px;
+        opacity: 80%;
+    }
+    
+    input[type=submit] {
+        width: 100%;
+        background-color: black;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        letter-spacing: 4px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+    
+    input[type=submit]:hover {
+        background-color: #45a049;
+        transform: scale(1.03);
+        border-radius: 8px;
+    }
+    
+    div {
+        border-radius: 5px;
+        background-color: #f2f2f2;
+        padding: 20px;
+        width: 50%;
+        margin: auto;
+        letter-spacing: 1.5px;
+        font-size: 16px;
+    }
+</style>
+
+<body>
+
+    <div>
+        <p>* indicates that it is a mandatory field</p>
+        <form action="/quickadd" method="POST">
+            <label for="profid">*Profile ID</label><br>
+            <input type="text" id="pr_id" name="pid" placeholder="Profile ID" required><br>
+            <input type="submit" value="Regenerate ID" onclick="id_write();"><br>
+
+            <label for="mob">*Mobile Number</label><br>
+            <input type="text" id="mob" name="mob_no" placeholder="Client's Mobile Number" required><br>
+
+            <label for="mob">*Gender</label><br>
+            <input type="text" name="gender" placeholder="Client's Gender" required><br>
+
+            <label for="email">*E-Mail ID</label><br>
+            <input type="text" id="email" name="email" placeholder="Client's E-mail" required><br>
+
+            <label for="personcontacted">*Person Of Contact</label><br>
+            <input type="text" id="personcontacted" name="person_of_c" placeholder="Name Of Person Contacted" required><br>
+
+            <label for="rel">*Relation With Candidate</label><br>
+            <input type="text" id="rel" name="relation" placeholder="Father, Mother, Brother, Self, etc..." required><br>
+
+            <label for="Address">*Address</label><br>
+            <input type="text" id="Address" name="address" placeholder="Plot No., Street Number,Landmark..." required><br>
+
+            <label for="city">*City</label><br>
+            <input type="text" id="city" name="city" placeholder="City" required><br>
+
+
+
+
+
+
+            <input type="submit" value="REGISTER">
+        </form>
+    </div>
+
+    <script type="text/javascript">
+        function id_write() // to write automatic ids when new ids are created 
+        {
+            var request = new XMLHttpRequest();
+            request.onreadystatechange = function() {
+                if (request.readyState === XMLHttpRequest.DONE) {
+                    // Take some action
+                    if (request.status === 200) {
+                        var data = JSON.parse(this.responseText);
+                        var actual_id = 'VC' + data[0].id;
+                        document.getElementById('pr_id').value = actual_id;
+                        //pid_write();
+                    } else if (request.status === 403) {
+                        display_btn.value = 'something went wrong';
+                    } else if (request.status === 500) {
+                        alert('Something went wrong on the server');
+
+                    } else {
+                        alert('Something went wrong on the server');
+
+                    }
+
+                }
+
+            };
+
+            // Make the request
+            request.open('GET', '/autoid', true);
+            request.send(null);
+        }
+        id_write();
+    </script>
+</body>
+
+</html>
