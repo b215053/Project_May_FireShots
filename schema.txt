@@ -278,4 +278,7 @@ ALTER "family_values" DROP NOT NULL,
 ALTER "preferred_partner_caste" TYPE text,
 ALTER "preferred_partner_caste" DROP DEFAULT,
 ALTER "preferred_partner_caste" DROP NOT NULL;
+ALTER TABLE "user_details"
+ADD "education" text NULL;
+COMMENT ON TABLE "user_details" IS '';
 
