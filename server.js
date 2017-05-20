@@ -97,6 +97,120 @@ app.post('/updatestage',function(req,res){
             }
     });
 });
+app.get('/filter-query/:gender/:criteria/:value',function(req,res){
+   
+    var gender= req.params.gender;
+    var criteria = req.params.criteria;
+    var value= req.params.value;
+   console.log(gender.toUpperCase());
+    console.log(criteria.toUpperCase());
+    console.log(value.toUpperCase());
+    if(criteria.toUpperCase()==='CASTE')
+        {
+    pool.query('select * from user_details where upper(gender)=upper($1) and upper(caste)=upper($2)',[gender,value],function(err,result){
+    
+        if(err)
+            {
+                res.status(500).send(err.toString());
+            }
+        else
+            {
+                res.send(JSON.stringify(result.rows));
+            }
+    });
+        }
+    if(criteria.toUpperCase()==='RELIGION')
+        {
+    pool.query('select * from user_details where upper(gender)=upper($1) and upper(religion)=upper($2)',[gender,value],function(err,result){
+    
+        if(err)
+            {
+                res.status(500).send(err.toString());
+            }
+        else
+            {
+                res.send(JSON.stringify(result.rows));
+            }
+    });
+        }
+    if(criteria.toUpperCase()==='MARITAL-STATUS')
+        {
+    pool.query('select * from user_details where upper(gender)=upper($1) and upper(marital_status)=upper($2)',[gender,value],function(err,result){
+    
+        if(err)
+            {
+                res.status(500).send(err.toString());
+            }
+        else
+            {
+                res.send(JSON.stringify(result.rows));
+            }
+    });
+        }
+    if(criteria.toUpperCase()==='MOTHER-TONGUE')
+        {
+    pool.query('select * from user_details where upper(gender)=upper($1) and upper(mother_tongue)=upper($2)',[gender,value],function(err,result){
+    
+        if(err)
+            {
+                res.status(500).send(err.toString());
+            }
+        else
+            {
+                res.send(JSON.stringify(result.rows));
+            }
+    });
+        }
+    if(criteria.toUpperCase()==='AGE')
+        {
+    pool.query('select * from user_details where upper(gender)=upper($1) and age<=($2)',[gender,value],function(err,result){
+    
+        if(err)
+            {
+                res.status(500).send(err.toString());
+            }
+        else
+            {
+                res.send(JSON.stringify(result.rows));
+            }
+    });
+        }
+    if(criteria.toUpperCase()==='LOCATION')
+        {
+    pool.query('select * from user_details where upper(gender)=upper($1) and upper(city)=upper($2)',[gender,value],function(err,result){
+    
+        if(err)
+            {
+                res.status(500).send(err.toString());
+            }
+        else
+            {
+                res.send(JSON.stringify(result.rows));
+            }
+    });
+        }
+    if(criteria.toUpperCase()==='EDUCATION')
+        {
+    pool.query('select * from user_details where upper(gender)=upper($1) and upper(education)=upper($2)',[gender,value],function(err,result){
+    
+        if(err)
+            {
+                res.status(500).send(err.toString());
+            }
+        else
+            {
+                console.log('here');
+                res.send(JSON.stringify(result.rows));
+            }
+    });
+        }
+
+
+
+
+
+
+});
 app.get('/viewallprospects',function(req,res){
    pool.query('select * from user_status where stage >=1',function(err,result){
        if(err)

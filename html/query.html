@@ -1,13 +1,11 @@
-<!DOCTYPE html>
-<style>
+<!--give links to profile ids-->
 
-</style>
+<!DOCTYPE html>
 <html>
 
 <head>
-    <title>
-    </title>
-    <meta charset="utf-8">
+    <title>Query</title>
+    <meta charset='utf-8'>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -15,6 +13,7 @@
 </head>
 
 <body>
+    <!------------------------check background and update the header portion----------------------------------------------->
     <div class="container">
         <div class="col-sm-12" style="text-align:right">
             <img src="/uploads/logol.jpg" style="float:left;height:60px;width:300px;margin-left:-60px" />
@@ -30,40 +29,98 @@
 
             <ul class="nav navbar-nav">
                 <li><a href="/html/dashboard.html">Dashboard</a></li>
-                <li class="active"><a href="/html/leads.html">Leads</a></li>
+                <li><a href="/html/leads.html">Leads</a></li>
                 <li><a href="/html/enquiry2.html">Create New Enquiry</a></li>
                 <li><a href="/html/prospect.html">Prospects</a></li>
                 <li><a href="/html/payment.html">Payment</a></li>
-                <li><a href="/html/query.html">Query</a></li>
+                <li class="active"><a href="/html/query.html">Query</a></li>
             </ul>
+
         </div>
+
     </nav>
 
     <div class="container">
-        <h4 style="text-decoration:underline;text-align:center"><b>My Leads</b></h4>
-        <div style="height:435px;overflow:auto;background-color: aliceblue">
-            <table class="table table-condensed">
 
-                <thead style="background-color:darkgrey">
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Contact no.</th>
-                        <th>Stage</th>
-                        <th>Call-in Update</th>
-                        <th>Walk-in Update</th>
-                    </tr>
-                </thead>
-                <tbody id='leads'>
 
-                </tbody>
+        <div class="panel-group" id="accordion">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse1"><strong>Search</strong></a>
+                    </h4>
+                </div>
+                <div id="collapse1" class="panel-collapse collapse in">
+                    <div class="panel-body">
+                        Search tool
+                        <!-----------------------Search tool goes here----------------------------------->
 
-            </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse2"><strong>Filter</strong></a>
+                    </h4>
+                </div>
+                <div id="collapse2" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <!---------------------------Filter tool goes here-------------------------------------------->
+                        <h4>Filter options</h4>
+                        <hr/>
+                        <div class="col-sm-3">
+                            <form class="form-inline">
+                                <div class="form-group">
+                                    <label for="gender">Gender:</label>
+                                    <select class="form-control" id="sel1">
+                                            <option>Male</option>
+                                            <option>Female</option>
+                                        </select>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-sm-3">
+                            <form class="form-inline">
+                                <div class="form-group">
+                                    <label for="Criteria">Filter Criteria:</label>
+                                    <select class="form-control" id="sel2">
+                                            <option>Caste</option>
+                                            <option>Religion</option>
+                                            <option>Marital-status</option>
+                                            <option>Mother tongue</option>
+                                            <option>Age</option>
+                                            <option>Location</option>
+                                            <option>Education</option>
+                                        </select>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-sm-3">
+                            <form class="form-inline">
+                                <div class="form-group">
+                                    <label for="value">Value:</label>
+                                    <input class="text" class="form-control" id="inp_value">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-sm-3">
+                            <button type="button" class="btn" id="filter_submit">Submit</button>
+                        </div>
+
+                        <div class="col-sm-12" id="filtered_table">
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
+
     </div>
 
-
-    <!-- Modal HTML -->
     <div id="myModal" class="modal fade">
         <div class="modal-dialog" style="width:1080px">
             <div class="modal-content">
@@ -163,57 +220,11 @@
         </div>
     </div>
 
-
-
 </body>
 
 </html>
-<script>
-    function viewleads() {
-        var request = new XMLHttpRequest();
-        request.onreadystatechange = function() {
-            if (request.readyState === XMLHttpRequest.DONE) {
 
-                if (request.status === 200) {
-
-                    var content = '';
-                    var data = JSON.parse(this.responseText);
-                    var i = 0;
-                    console.log(data.length);
-                    for (; i < data.length; i++) {
-                        if (data[i].stage === 0) {
-                            content += `<tr><td><div class="myprofile">
-                                                                                     
-                                 <input type="submit" value="${data[i].profile_id}" onclick="clicked('${data[i].profile_id}');">
-                             </div></td><td>${data[i].person_of_contact}</td><td>${data[i].mobile_no}<td>Lead</td><td><a href="/cwupdate/${data[i].profile_id}"><img src="/uploads/updatelogo.png" style="height:20px;width:20px;margin-left:50px"/></a></td>
-                             <td><a href="/cwupdate/${data[i].profile_id}"><img src="/uploads/updatelogo.png" style="height:20px;width:20px;margin-left:50px"/></a></td></tr>`;
-                        }
-                    }
-                    document.getElementById('leads').innerHTML = content;
-
-                } else if (request.status === 403) {
-                    alert('something went wrong on the server');
-                } else if (request.status === 500) {
-                    alert('Something went wrong on the server');
-
-                } else {
-
-                    alert('Something went wrong');
-
-                }
-            }
-        };
-        request.open('GET', '/viewleads', true);
-        request.send(null);
-
-    }
-
-    function loadLoggedInUser(username) {
-
-        document.getElementById("logout").innerHTML = `<p>Hi,${username}</p><a href="/logout">Logout</a>`;
-        viewleads();
-    }
-
+<script type="application/javascript">
     function loadLogin() {
         // Check if the user is already logged in
         var request = new XMLHttpRequest();
@@ -221,15 +232,121 @@
             if (request.readyState === XMLHttpRequest.DONE) {
                 if (request.status === 200) {
                     loadLoggedInUser(this.responseText);
-
+                    // changediv(this.responseText);
                 }
-
             }
         };
 
         request.open('GET', '/check-login', true);
         request.send(null);
     }
+
+    function loadLoggedInUser(username) {
+
+        document.getElementById("logout").innerHTML = `<p>Hi,${username}</p><a href="/logout">Logout</a>`;
+    }
+
+    loadLogin();
+
+
+
+    function show_filter_table() {
+        var filter_submit_btn = document.getElementById('filter_submit');
+        filter_submit_btn.onclick = function() {
+            var request = new XMLHttpRequest();
+            var inp_gender = document.getElementById("sel1");
+            var inp_criteria = document.getElementById("sel2");
+            var inp_value = document.getElementById("inp_value");
+            if (inp_value.value === '') {
+                alert("Please enter inputs to the required field....");
+                return;
+            }
+
+            var criteria = '';
+            switch (inp_criteria.value) {
+                case 'Marital-status':
+                    criteria = 'marital-status';
+                    break;
+                case 'Mother tongue':
+                    criteria = 'mother-tongue';
+                    break;
+                default:
+                    criteria = inp_criteria.value.toLowerCase();
+                    break;
+            }
+
+            request.onreadystatechange = function() {
+                if (request.readyState === XMLHttpRequest.DONE) {
+                    if (request.status === 200) {
+                        var content = `<table class = "table-condensed"><thead><tr><th class = "col-sm-1">Profile id</th><th class = "col-sm-2">Name</th><th class = "col-sm-1">Age</th><th class = "col-sm-1">Religion</th><th class = "col-sm-1">Caste</th><th class = "col-sm-1">Mother tongue</th><th class = "col-sm-1">Marital-status</th><th class = "col-sm-1">Location</th><th class = "col-sm-1">Education</th><th class = "col-sm-1">Mobile no</th><th class = "col-sm-1">Stage</th></tr></thead><tbody>`;
+
+
+                        var data = JSON.parse(this.responseText);
+                        if (data.length === 0) {
+                            alert('Empty string');
+                            return;
+                        }
+                        var i = 0;
+                        var stagename = "";
+                        for (; i < data.length; i++) {
+
+                            switch (data[i].stage) {
+                                case 0:
+                                    stagename = "LEAD";
+                                    break;
+                                case 1:
+                                    stagename = "PROSPECT";
+                                    break;
+                                case 2:
+                                    stagename = "OPPURTUNITY";
+                                    break;
+                                case 3:
+                                    stagename = "VCC-3 MONTHS";
+                                    break;
+                                case 4:
+                                    stagename = "VCC-6 MONTHS";
+                                    break;
+                                case 5:
+                                    stagename = "VCC-12 MONTHS";
+                                    break;
+                                case 6:
+                                    stagename = "VAC-3 MONTHS";
+                                    break;
+                                case 7:
+                                    stagename = "VAC-6 MONTHS";
+                                    break;
+                                default:
+                                    stagename = "-";
+                            }
+                            content += `<tr><td><input type="submit" value="${data[i].profile_id}"onclick="clicked('${data[i].profile_id}');"></td><td>${data[i].person_of_contact}&nbsp</td><td>${data[i].age}&nbsp</td><td>${data[i].religion}&nbsp</td><td>${data[i].caste}&nbsp</td><td>${data[i].mother_tongue}&nbsp</td><td>${data[i].marital_status}&nbsp</td><td>${data[i].city}&nbsp</td><td>${data[i].education}&nbsp</td><td> ${data[i].mobile_no}&nbsp</td><td>${stagename}&nbsp</td></tr>`;
+                            //check qualification in schema..
+                            //double check content.
+                        }
+                        content += `</tbody></table>`
+                        document.getElementById('filtered_table').innerHTML = content;
+
+                    } else if (request.status === 403) {
+                        alert('Something went wrong');
+                    } else if (request.status === 500) {
+                        alert("Internal server error...You may be seeing this because input value doesn't exist in database..");
+                    } else {
+                        alert('Something else went wrong with the server.');
+                    }
+                }
+            };
+
+            request.open('GET', '/filter-query/' + inp_gender.value.toLowerCase() + '/' + criteria + '/' + inp_value.value.toUpperCase(), true);
+            /*request.setRequestHeader('content-type','application/json');
+            request.send(JSON.stringify({
+                gender:inp_gender.value.toLowerCase(),
+                criteria:criteria,
+                value:inp_value.value
+            }));*/
+            request.send(null);
+        };
+    }
+    show_filter_table();
+
 
     function clicked(item) {
         console.log('clicked');
@@ -376,7 +493,4 @@
         request.open('GET', `/user_details/${item}`, true);
         request.send(null);
     }
-
-    loadLogin();
-    //viewleads();
 </script>
