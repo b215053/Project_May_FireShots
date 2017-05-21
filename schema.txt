@@ -297,3 +297,8 @@ ADD "ref1_contact" text NULL,
 ADD "ref2_name" text NULL,
 ADD "ref2_contact" text NULL;
 COMMENT ON TABLE "user_details" IS '';
+ALTER TABLE "user_details"
+ADD "preferred_partner_mother_tongue" text NULL,
+ADD "preferred_partner_family_type" text NULL,
+ADD "preferred_partner_family_values" text NULL;
+COMMENT ON TABLE "user_details" IS '';
