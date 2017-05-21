@@ -281,4 +281,19 @@ ALTER "preferred_partner_caste" DROP NOT NULL;
 ALTER TABLE "user_details"
 ADD "education" text NULL;
 COMMENT ON TABLE "user_details" IS '';
-
+ALTER TABLE "user_details"
+ADD "place_of_birth" text NULL,
+ADD "weight" text NULL,
+ADD "annual_income" text NULL,
+ADD "more_about_candidate" text NULL,
+ADD "fathers_contact" text NULL,
+ADD "mothers_contact" text NULL,
+ADD "negotiator_name" text NULL,
+ADD "negotiator_mobile_no" text NULL,
+ADD "negotiator_relation" text NULL,
+ADD "negotiator_other_details" text NULL,
+ADD "ref1_name" text NULL,
+ADD "ref1_contact" text NULL,
+ADD "ref2_name" text NULL,
+ADD "ref2_contact" text NULL;
+COMMENT ON TABLE "user_details" IS '';
